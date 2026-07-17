@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
 @theme inline {
+  --font-geist-pixel: ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+  --font-mondwest: Iowan Old Style, Palatino Linotype, Book Antiqua, ui-serif, Georgia, serif;
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
   --color-background: var(--background);
   --color-border: var(--border);
   --color-card: var(--card);
@@ -17,50 +20,51 @@
 
 @layer base {
   :root {
-    --background: oklch(0.97 0.01 100);
-    --border: oklch(0.78 0.01 100);
-    --card: oklch(0.985 0.006 100);
-    --card-foreground: oklch(0.19 0.01 80);
+    --background: oklch(0.9628 0.0065 106.784);
+    --border: oklch(0.805 0.0075 106.8);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
     --destructive: oklch(0.54 0.2 25);
-    --foreground: oklch(0.19 0.01 80);
-    --muted: oklch(0.93 0.01 100);
-    --muted-foreground: oklch(0.46 0.02 80);
-    --primary: oklch(0.44 0.12 258);
-    --primary-foreground: oklch(0.98 0.005 100);
-    --ring: oklch(0.44 0.12 258);
+    --foreground: oklch(0.145 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --primary: oklch(0.205 0 0);
+    --primary-foreground: oklch(0.985 0 0);
+    --ring: oklch(0.556 0 0);
     --warning: oklch(0.66 0.15 77);
+    --radius: 0;
     color-scheme: light;
   }
 
   :root[data-theme="dark"] {
-    --background: oklch(0.17 0.012 80);
-    --border: oklch(0.34 0.015 80);
-    --card: oklch(0.21 0.012 80);
-    --card-foreground: oklch(0.94 0.01 100);
-    --destructive: oklch(0.72 0.16 25);
-    --foreground: oklch(0.94 0.01 100);
-    --muted: oklch(0.27 0.012 80);
-    --muted-foreground: oklch(0.72 0.015 100);
-    --primary: oklch(0.75 0.11 258);
-    --primary-foreground: oklch(0.18 0.012 80);
-    --ring: oklch(0.75 0.11 258);
+    --background: oklch(0.145 0 0);
+    --border: oklch(1 0 0 / 10%);
+    --card: oklch(0.205 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --primary: oklch(0.87 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --ring: oklch(0.556 0 0);
     --warning: oklch(0.78 0.14 80);
     color-scheme: dark;
   }
 
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme]) {
-      --background: oklch(0.17 0.012 80);
-      --border: oklch(0.34 0.015 80);
-      --card: oklch(0.21 0.012 80);
-      --card-foreground: oklch(0.94 0.01 100);
-      --destructive: oklch(0.72 0.16 25);
-      --foreground: oklch(0.94 0.01 100);
-      --muted: oklch(0.27 0.012 80);
-      --muted-foreground: oklch(0.72 0.015 100);
-      --primary: oklch(0.75 0.11 258);
-      --primary-foreground: oklch(0.18 0.012 80);
-      --ring: oklch(0.75 0.11 258);
+      --background: oklch(0.145 0 0);
+      --border: oklch(1 0 0 / 10%);
+      --card: oklch(0.205 0 0);
+      --card-foreground: oklch(0.985 0 0);
+      --destructive: oklch(0.704 0.191 22.216);
+      --foreground: oklch(0.985 0 0);
+      --muted: oklch(0.269 0 0);
+      --muted-foreground: oklch(0.708 0 0);
+      --primary: oklch(0.87 0 0);
+      --primary-foreground: oklch(0.205 0 0);
+      --ring: oklch(0.556 0 0);
       --warning: oklch(0.78 0.14 80);
       color-scheme: dark;
     }

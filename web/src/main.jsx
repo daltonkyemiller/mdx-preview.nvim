@@ -144,7 +144,7 @@ function Preview() {
           </Button>
         </div>
       </header>
-      <main>
+      <main className="document-frame">
         <MDXProvider components={components}>
           <Document />
         </MDXProvider>

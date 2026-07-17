@@ -3,54 +3,46 @@
   --page-muted: var(--muted-foreground);
   --page-paper: var(--background);
   --page-rule: var(--border);
-  color: var(--page-ink);
   background: var(--page-paper);
-  font-family: ui-serif, Georgia, Cambria, serif;
+  color: var(--page-ink);
+  font-family: var(--font-sans);
   font-kerning: normal;
 }
 
 body {
   min-height: 100vh;
-  margin: 0 auto;
-  background-image: linear-gradient(
-    to right,
-    color-mix(in oklch, var(--page-ink) 4%, transparent) 1px,
-    transparent 1px
-  );
-  background-size: 4rem 100%;
+  margin: 0;
+  background: var(--page-paper);
 }
 
 #root {
-  width: min(100% - 2rem, 76rem);
-  min-height: 100vh;
-  margin: 0 auto;
-  padding: clamp(3rem, 9vw, 8rem) clamp(1rem, 6vw, 6rem);
-  background: color-mix(in oklch, var(--page-paper) 94%, transparent);
-  border-inline: 1px solid color-mix(in oklch, var(--page-ink) 7%, transparent);
+  width: min(calc(100% - 2rem), 76rem);
+  min-height: calc(100vh - 2rem);
+  margin: 1rem auto;
+  border: 1px solid var(--page-rule);
+  background: var(--card);
 }
 
 .preview-toolbar {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
   gap: 1rem;
-  margin-bottom: clamp(2rem, 5vw, 4rem);
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--page-rule);
+  padding: 0.9rem 1.25rem;
 }
 
 .preview-toolbar__label,
 .preview-toolbar__status {
   margin: 0;
-  font-family: ui-monospace, monospace;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-family: var(--font-geist-pixel);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
 }
 
 .preview-toolbar__label {
-  color: var(--primary);
+  color: var(--page-muted);
 }
 
 .preview-toolbar__actions {
@@ -61,13 +53,12 @@ body {
 
 .preview-theme-control {
   display: flex;
-  overflow: hidden;
-  border: 1px solid var(--border);
+  border: 1px solid var(--page-rule);
 }
 
 .preview-theme-control button {
   border: 0;
-  border-right: 1px solid var(--border);
+  border-right: 1px solid var(--page-rule);
 }
 
 .preview-theme-control button:last-child {
@@ -78,71 +69,96 @@ body {
   color: var(--page-muted);
 }
 
-h1,
-h2,
-h3 {
-  margin: 2.75rem 0 1rem;
-  font-family: ui-sans-serif, system-ui, sans-serif;
-  letter-spacing: -0.04em;
+.document-frame {
+  padding: clamp(2rem, 5vw, 5rem) clamp(1.25rem, 5vw, 4rem) clamp(3rem, 7vw, 7rem);
+}
+
+.document-frame > :first-child {
+  margin-top: 0;
+}
+
+.document-frame h1,
+.document-frame h2,
+.document-frame h3 {
+  font-family: var(--font-mondwest);
+  font-weight: 400;
+  letter-spacing: -0.055em;
+}
+
+.document-frame h1 {
+  max-width: 10ch;
+  margin: 0 0 clamp(2.5rem, 6vw, 5rem);
+  font-size: clamp(3.5rem, 10vw, 8.5rem);
+  line-height: 0.82;
+}
+
+.document-frame h2 {
+  margin: clamp(4rem, 9vw, 8rem) 0 1.25rem;
+  font-size: clamp(2rem, 5vw, 4.5rem);
+  line-height: 0.9;
+}
+
+.document-frame h3 {
+  margin: 2.5rem 0 0.75rem;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
   line-height: 0.95;
 }
 
-h1 {
-  max-width: 11ch;
-  margin-top: 0;
-  font-size: clamp(3rem, 9vw, 7rem);
-}
-
-h2 {
-  font-size: clamp(1.5rem, 4vw, 2.6rem);
-}
-
-p,
-li {
-  max-width: 68ch;
-  font-size: 1.08rem;
+.document-frame p,
+.document-frame li {
+  max-width: 66ch;
+  font-size: 1rem;
   line-height: 1.65;
 }
 
-a {
+.document-frame p {
+  margin-block: 1rem;
+}
+
+.document-frame a {
   color: inherit;
-  text-decoration-color: color-mix(in oklch, var(--page-ink) 45%, transparent);
-  text-underline-offset: 0.2em;
+  text-decoration-color: var(--page-muted);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
 }
 
-img {
+.document-frame img {
   max-width: 100%;
+  border: 1px solid var(--page-rule);
 }
 
-pre {
+.document-frame pre {
   overflow: auto;
-  padding: 1rem;
   border: 1px solid var(--page-rule);
-  background: color-mix(in oklch, var(--page-paper) 90%, white);
+  background: var(--muted);
 }
 
 .error {
-  color: oklch(0.49 0.18 25);
+  margin: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--destructive);
+  color: var(--destructive);
   white-space: pre-wrap;
 }
 
 @media (max-width: 640px) {
   #root {
     width: 100%;
-    padding-inline: 1.25rem;
-    border: 0;
-  }
-
-  .preview-toolbar__status {
-    display: none;
+    min-height: 100vh;
+    margin: 0;
+    border-inline: 0;
   }
 
   .preview-toolbar {
-    align-items: flex-start;
+    grid-template-columns: 1fr;
+    align-items: start;
   }
 
   .preview-toolbar__actions {
     flex-wrap: wrap;
-    justify-content: flex-end;
+  }
+
+  .preview-toolbar__status {
+    display: none;
   }
 }

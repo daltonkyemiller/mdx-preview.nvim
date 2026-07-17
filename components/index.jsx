@@ -1,7 +1,7 @@
 import { Button } from "./ui/button.jsx";
 
-const panelClassName = "border border-border bg-card p-5 text-card-foreground";
-const kickerClassName = "mb-2 text-xs font-bold tracking-[0.12em] text-primary uppercase";
+const panelClassName = "border border-border bg-card p-5 text-card-foreground sm:p-6";
+const kickerClassName = "mb-3 font-geist-pixel text-[10px] tracking-[0.2em] text-muted-foreground uppercase";
 const listClassName = "grid list-none border-y border-border p-0";
 
 export function Callout({ children, title = "Note", tone = "info" }) {
@@ -24,7 +24,9 @@ export function Flow({ steps }) {
     <ol className={listClassName}>
       {steps.map((step, index) => (
         <li className="grid grid-cols-[3rem_1fr] gap-4 border-b border-border py-4 last:border-b-0" key={step.title}>
-          <span className="font-mono text-sm text-primary">{String(index + 1).padStart(2, "0")}</span>
+          <span className="font-geist-pixel text-xs tracking-[0.12em] text-muted-foreground">
+            {String(index + 1).padStart(2, "0")}
+          </span>
           <div>
             <strong>{step.title}</strong>
             {step.detail ? <p className="mb-0 text-muted-foreground">{step.detail}</p> : null}
@@ -101,7 +103,7 @@ export function Metric({ label, value, detail }) {
   return (
     <section className={panelClassName}>
       <p className={kickerClassName}>{label}</p>
-      <strong className="block font-serif text-5xl leading-none font-normal tracking-[-0.05em] sm:text-7xl">
+      <strong className="block font-mondwest text-5xl leading-none font-normal tracking-tight sm:text-7xl">
         {value}
       </strong>
       {detail ? <p className="mb-0 text-muted-foreground">{detail}</p> : null}
@@ -126,7 +128,7 @@ export function Architecture({ nodes }) {
 export function CodeBlock({ children, language = "text", title }) {
   return (
     <section className="overflow-hidden border border-border bg-card">
-      <header className="border-b border-border px-4 py-2.5 font-mono text-xs font-bold tracking-[0.1em] text-primary uppercase">
+      <header className="border-b border-border px-4 py-2.5 font-geist-pixel text-[10px] tracking-[0.18em] text-muted-foreground uppercase">
         <span>{title ?? language}</span>
       </header>
       <pre className="m-0 overflow-auto border-0 bg-transparent p-4">

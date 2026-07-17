@@ -19,9 +19,11 @@ import ${JSON.stringify(stylesPath)};
 import ${JSON.stringify(`${tailwindPath}?source=${encodeURIComponent(dirname(documentPath))}`)};
 
 createRoot(document.getElementById("root")).render(
-  <MDXProvider components={components}>
-    <Document />
-  </MDXProvider>
+  <main className="document-frame">
+    <MDXProvider components={components}>
+      <Document />
+    </MDXProvider>
+  </main>
 );
 `;
 
