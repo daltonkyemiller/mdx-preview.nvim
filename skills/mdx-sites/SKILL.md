@@ -13,18 +13,18 @@ Create durable source artifacts, not chat-only plans. Keep plan content in local
 2. Choose a checked-in `plans/<slug>/` folder unless the user asks for temporary output. Create it with:
 
    ```sh
-   pnpm exec mdx-preview new <slug> --out plans --title "Plan title"
+   mdx-preview new <slug> --out plans --title "Plan title"
    ```
 
 3. Read `references/components.md`, then use the smallest set of components that clarifies the artifact. Do not pad a plan with decorative metrics or diagrams.
 4. Write `index.mdx`. Use MDX imports and exports at the top level. Export local React components rather than declaring bare functions.
-5. Preview with `pnpm exec mdx-preview serve plans/<slug> --open`.
-6. Build a shareable static directory with `pnpm exec mdx-preview build plans/<slug> --out dist/<slug>`.
-7. Publish only when asked, using `pnpm exec mdx-preview publish plans/<slug> --out dist/<slug>`. This reads `HERENOW_API_KEY` when present; otherwise it creates a 24-hour anonymous site and prints its claim URL.
+5. Preview with `mdx-preview serve plans/<slug> --open`.
+6. Build a shareable static directory with `mdx-preview build plans/<slug> --out dist/<slug>`.
+7. Publish only when asked, using `mdx-preview publish plans/<slug> --out dist/<slug>`. This reads `HERENOW_API_KEY` when present; otherwise it creates a 24-hour anonymous site and prints its claim URL.
 
 ## Component registry
 
-Run `pnpm exec mdx-preview components list` for the installed registry. Read `references/components.md` for usage guidance.
+Run `mdx-preview components list` for the installed registry. Read `references/components.md` for usage guidance.
 
 For project-specific components, create `mdx-preview.config.mjs` beside the MDX site or in an ancestor directory:
 

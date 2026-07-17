@@ -182,11 +182,15 @@ Project-specific Tailwind themes and plugins are intentionally not loaded automa
 
 ## Agent skill
 
-The repo ships an installable `mdx-sites` skill. It tells agents to write durable local MDX plans, consult the component registry, validate in the browser, and only publish with approval.
+The repo ships an installable `mdx-sites` skill. A skill is agent-facing instruction and reference material: it tells an agent when to create a durable MDX artifact, which built-ins fit the task, how to preview/build it, and that publishing requires approval. It does not change Neovim behavior or automatically add project-specific components.
+
+Install it into the target project's agent-skill directory:
 
 ```sh
-pnpm mdx-preview skill install --target .agents/skills
+mdx-preview skill install --target /path/to/project/.agents/skills
 ```
+
+Once installed, invoke it explicitly as `$mdx-sites` or let a compatible agent select it when the task calls for a visual plan, local MDX site, preview, export, or publication. For custom components, add them to `mdx-preview.config.mjs` and document their intent, props, and examples in that project's agent instructions so the agent has the context to use them well.
 
 ## Here Now
 
