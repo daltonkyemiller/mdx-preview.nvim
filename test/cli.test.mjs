@@ -7,8 +7,10 @@ import { resolve } from "node:path";
 import { promisify } from "node:util";
 import test from "node:test";
 import { buildSite } from "../server/build.mjs";
+import { runCli } from "../server/cli.mjs";
+import { describeDocument, resolveDocument } from "../server/document.mjs";
 import { loadSiteConfiguration } from "../server/registry.mjs";
-import { startPreviewServer } from "../server/server.mjs";
+import { startPreviewSession } from "../server/preview-session.mjs";
 import { listPreviewServers, stopPreviewServers } from "../server/servers.mjs";
 
 const execute = promisify(execFile);
@@ -47,6 +49,15 @@ test("loads a configured site theme for every document below its config", async 
   assert.equal(typeof site.themeVersion, "number");
 });
 
+test("resolves a site directory and describes the document used by every renderer", async () => {
+  const documentPath = await resolveDocument("examples/custom-registry");
+  const document = await describeDocument(documentPath);
+
+  assert.equal(document.file, resolve("examples/custom-registry/index.mdx"));
+  assert.equal(document.theme, resolve("examples/custom-registry/theme.css"));
+  assert.equal(document.directory, resolve("examples/custom-registry"));
+});
+
 test("exports one HTML file when requested", async (context) => {
   const output = await temporaryDirectory("mdx-preview-single-");
   context.after(() => rm(output, { force: true, recursive: true }));
@@ -57,18 +68,15 @@ test("exports one HTML file when requested", async (context) => {
   assert.match(await readFile(resolve(output, "index.html"), "utf8"), /Loaded from mdx-preview.config.mjs/);
 });
 
-test("exports standalone HTML from the preview server", async (context) => {
-  const server = await startPreviewServer({
+test("exports standalone HTML from the preview session", async (context) => {
+  const session = await startPreviewSession({
     file: resolve("examples/custom-registry/index.mdx"),
     port: await availablePort(),
   });
-  const address = server.httpServer.address();
-  const port = typeof address === "object" && address ? address.port : null;
 
-  context.after(() => server.close());
-  assert.ok(port);
+  context.after(() => session.close());
 
-  const response = await fetch(`http://localhost:${port}/api/export`, { method: "POST" });
+  const response = await fetch(`${session.url}/api/export`, { method: "POST" });
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-disposition") ?? "", /attachment; filename="index.html"/);
   assert.match(await response.text(), /Loaded from mdx-preview.config.mjs/);
@@ -76,14 +84,14 @@ test("exports standalone HTML from the preview server", async (context) => {
 
 test("lists and stops registered preview servers", async (context) => {
   const registryDirectory = await temporaryDirectory("mdx-preview-servers-");
-  const server = await startPreviewServer({
+  const session = await startPreviewSession({
     file: resolve("examples/custom-registry/index.mdx"),
     port: await availablePort(),
     registryDirectory,
   });
 
   context.after(async () => {
-    await server.close();
+    await session.close();
     await rm(registryDirectory, { force: true, recursive: true });
   });
 
@@ -94,6 +102,33 @@ test("lists and stops registered preview servers", async (context) => {
   const stoppedServers = await stopPreviewServers({ directory: registryDirectory });
   assert.equal(stoppedServers.length, 1);
   assert.deepEqual(await listPreviewServers({ directory: registryDirectory }), []);
+});
+
+test("runs CLI commands through one command interface", async () => {
+  const messages = [];
+  const calls = [];
+  await runCli({
+    argumentsList: ["serve", "plan.mdx", "--port", "4328", "--open"],
+    dependencies: {
+      openBrowser: async (url) => calls.push(["open", url]),
+      resolveDocument: async (path) => {
+        calls.push(["resolve", path]);
+        return "/tmp/plan.mdx";
+      },
+      startPreviewSession: async (options) => {
+        calls.push(["start", options]);
+        return { url: "http://localhost:4330" };
+      },
+    },
+    write: (message) => messages.push(message),
+  });
+
+  assert.deepEqual(calls, [
+    ["resolve", "plan.mdx"],
+    ["start", { file: "/tmp/plan.mdx", port: 4328 }],
+    ["open", "http://localhost:4330"],
+  ]);
+  assert.deepEqual(messages, ["Preview: http://localhost:4330"]);
 });
 
 test("rejects an invalid component registry", async (context) => {

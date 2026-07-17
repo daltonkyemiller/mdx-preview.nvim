@@ -10,6 +10,7 @@ local configuration = vim.deepcopy(defaults)
 local server_job_id
 local is_server_stopping = false
 local state_path
+local preview_url
 local preview_group = vim.api.nvim_create_augroup("mdx-preview", { clear = true })
 
 local function plugin_root()
@@ -51,6 +52,14 @@ local function update_preview()
   end
 end
 
+local function open_preview(url)
+  preview_url = url
+  if configuration.open_browser then
+    vim.ui.open(url)
+  end
+  vim.notify("mdx-preview: " .. url)
+end
+
 function M.setup(options)
   configuration = vim.tbl_deep_extend("force", vim.deepcopy(defaults), options or {})
 end
@@ -63,6 +72,9 @@ function M.start()
 
   if server_job_id then
     write_state(path)
+    if preview_url then
+      open_preview(preview_url)
+    end
   else
     is_server_stopping = false
     state_path = vim.fn.stdpath("run") .. "/mdx-preview.json"
@@ -78,8 +90,19 @@ function M.start()
     }
 
     server_job_id = vim.fn.jobstart(command, {
+      on_stdout = function(_, data)
+        for _, line in ipairs(data) do
+          local url = line:match("MDX_PREVIEW_URL=(http://localhost:%d+)")
+          if url then
+            vim.schedule(function()
+              open_preview(url)
+            end)
+          end
+        end
+      end,
       on_exit = function(_, exit_code)
         server_job_id = nil
+        preview_url = nil
         if exit_code ~= 0 and not is_server_stopping then
           vim.schedule(function()
             vim.notify("mdx-preview server exited with code " .. exit_code, vim.log.levels.ERROR)
@@ -96,11 +119,9 @@ function M.start()
     end
   end
 
-  local url = "http://localhost:" .. configuration.port
-  if configuration.open_browser then
-    vim.ui.open(url)
+  if not preview_url then
+    vim.notify("mdx-preview: starting preview server")
   end
-  vim.notify("mdx-preview: " .. url)
 end
 
 function M.stop()

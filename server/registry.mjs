@@ -65,10 +65,8 @@ export const loadSiteConfiguration = async (documentPath) => {
   };
 };
 
-export const loadRegistry = async (documentPath) => (await loadSiteConfiguration(documentPath)).components;
-
 export const createRegistryModule = async (documentPath) => {
-  const registry = await loadRegistry(documentPath);
+  const { components: registry } = await loadSiteConfiguration(documentPath);
   const imports = registry.map((component, index) => {
     const importName = `component${index}`;
     const importPath = JSON.stringify(component.module);

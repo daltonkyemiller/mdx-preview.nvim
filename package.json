@@ -7,7 +7,7 @@
   "type": "module",
   "scripts": {
     "build": "node bin/mdx-preview.mjs build",
-    "check": "node --check server/server.mjs && node --check server/runtime.mjs && node --check server/build.mjs && node --check server/publish.mjs && node --check bin/mdx-preview.mjs",
+    "check": "for file in server/*.mjs bin/mdx-preview.mjs; do node --check \"$file\"; done",
     "format": "oxfmt --config oxfmt.json --write .",
     "format:check": "oxfmt --config oxfmt.json --check .",
     "lint": "oxlint .",

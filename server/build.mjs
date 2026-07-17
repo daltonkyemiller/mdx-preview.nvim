@@ -3,13 +3,14 @@ import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, resolve } from "node:path";
 import { viteSingleFile } from "vite-plugin-singlefile";
+import { describeDocument } from "./document.mjs";
 import { componentRegistryUrl, createMdxPreviewAliases, createMdxPreviewPlugins } from "./runtime.mjs";
-import { loadSiteConfiguration, pluginRoot } from "./registry.mjs";
+import { pluginRoot } from "./registry.mjs";
 
 const writeBuildEntry = async (directory, documentPath) => {
   const stylesPath = resolve(pluginRoot, "web/src/styles.css");
   const tailwindPath = resolve(pluginRoot, "web/src/tailwind.css");
-  const { theme } = await loadSiteConfiguration(documentPath);
+  const { theme } = await describeDocument(documentPath);
   const entry = `
 import React from "react";
 import { createRoot } from "react-dom/client";
