@@ -75,7 +75,9 @@ Built-ins make relationships easier to read without falling back to a pile of ad
 <Flow steps={[{ title: "Write", detail: "Create the MDX artifact." }, { title: "Preview" }, { title: "Share" }]} />
 ```
 
-Use `pnpm mdx-preview components list` for the complete registry. It includes `Button`, `Callout`, `Flow`, `Comparison`, `FileMap`, `Decision`, `Timeline`, `Metric`, `Architecture`, and `CodeBlock`, plus when each component is useful.
+Use `pnpm mdx-preview components list` for the complete registry. It includes `Button`, `Callout`, `Flow`, `Comparison`, `FileMap`, `Decision`, `Timeline`, `Metric`, `Architecture`, `Diagram`, and `CodeBlock`, plus when each component is useful.
+
+`Diagram` is the default directed-diagram tool. Agents provide concise nodes and edges; Dagre supplies deterministic spacing and arrow routing so diagrams remain readable without manual coordinate work. Set `renderer="flow"` for an opt-in read-only React Flow canvas with pan, zoom, and fit-view controls. See the [component registry](components/REGISTRY.md#diagram) and the [example plan](examples/plans/toolkit-workflow/index.mdx).
 
 MDX only allows top-level ESM imports and exports. Export local components instead of declaring a bare top-level `function` or `const`.
 

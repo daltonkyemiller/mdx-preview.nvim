@@ -40,6 +40,7 @@ luac -p lua/mdx-preview/init.lua
 - Tailwind scans the active document directory and the bundled component kit. Keep the built-ins Tailwind-first and preserve CSS-variable theme tokens as the override contract.
 - Theme overrides need matching `:root`, `:root[data-theme="dark"]`, and `prefers-color-scheme` values so System, Light, and Dark viewer modes all render predictably.
 - Use Base UI only for interactive, accessible primitives. Keep plan and visualization components dependency-light compositions of those primitives and Tailwind utilities.
+- `Diagram` owns positioning through Dagre. Its inputs must be a small directed acyclic graph of concise node ids, labels, and edges; never add coordinates or make a single diagram carry unrelated flows. Use `renderer="flow"` only when React Flow navigation materially helps review.
 - Static directories are the primary export. Single-file output is an optional portability mode.
 - Do not publish material or alter Here Now access settings without explicit user approval.
 

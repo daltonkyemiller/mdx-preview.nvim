@@ -110,6 +110,31 @@ Use for a small set of connected system layers. Use `Flow` when order matters mo
 
 Props: `nodes: Array<{ label: string, title: string, detail?: string }>`.
 
+## `Diagram`
+
+Use when the direction of a handoff or dependency is the point. Nodes are laid out automatically; do not provide coordinates.
+
+```mdx
+<Diagram
+  title="Document lifecycle"
+  nodes={[
+    { id: "author", label: "Author", detail: "MDX source" },
+    { id: "preview", label: "Preview", detail: "Local browser" },
+    { id: "export", label: "Export", detail: "Static HTML" },
+  ]}
+  edges={[
+    { from: "author", to: "preview" },
+    { from: "preview", to: "export" },
+  ]}
+/>
+```
+
+Props: `nodes: Array<{ id: string, label: string, detail?: string }>`, `edges: Array<{ from: string, to: string }>`, `direction?: "right" | "down"`, `renderer?: "static" | "flow"`, `title?: string`, `caption?: string`.
+
+`renderer="static"` is the default: a compact fixed diagram suited to static documents. Use `renderer="flow"` when the reader benefits from pan, zoom, and a fit-view control. Flow mode uses Dagre for automatic layout and React Flow for rendering, but stays read-only.
+
+Use no more than eight nodes and twelve edges. Keep labels short, use a directed acyclic flow, and split unrelated systems into separate diagrams. Use `Flow` when the reader only needs a linear sequence; use `Architecture` when ownership matters more than the arrows.
+
 ## `CodeBlock`
 
 Use for a short, focused code or configuration excerpt.

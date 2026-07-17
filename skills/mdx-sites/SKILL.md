@@ -47,7 +47,8 @@ Add a `description`, `when`, props, and an example to the project's own agent in
 ## Site discipline
 
 - Keep standard Markdown as the default. Use React components only when they clarify a relationship, comparison, state, or interaction.
-- Use `Flow` for sequence, `Architecture` for ownership, `Comparison` for two alternatives, and `FileMap` for multi-file change surfaces.
+- Use `Flow` for sequence, `Architecture` for ownership, `Diagram` for a directed handoff or dependency graph, `Comparison` for two alternatives, and `FileMap` for multi-file change surfaces.
+- For `Diagram`, provide short `nodes` and `edges`, never manual positions. Keep it to eight nodes and twelve edges, avoid cycles, and split unrelated relationships into separate diagrams. Use `renderer="flow"` only when pan, zoom, and fit-view improve review; keep the static renderer for a compact finished document. Do not use a diagram when a `Flow` or short table is easier to scan.
 - Build a static directory as the canonical export. Use `--single-file` only when a recipient explicitly needs one HTML file.
 - Keep theme overrides token-based. Define light values in `:root`, explicit dark values in `:root[data-theme="dark"]`, and system-dark values in `prefers-color-scheme` so the viewer controls remain meaningful.
 - Do not publish private material without explicit approval. Keep `.herenow/` out of source control.

@@ -30,6 +30,23 @@ This is a checked-in plan, not a chat-only artifact. It uses ordinary Markdown f
   ]}
 />
 
+<Diagram
+  caption="The same relationship as the architecture list, shown when the handoff direction matters."
+  edges={[
+    { from: "author", to: "preview" },
+    { from: "preview", to: "export" },
+    { from: "preview", to: "publish" },
+  ]}
+  nodes={[
+    { id: "author", label: "Author", detail: "MDX source" },
+    { id: "preview", label: "Preview", detail: "Local browser" },
+    { id: "export", label: "Export", detail: "Single HTML" },
+    { id: "publish", label: "Publish", detail: "Static site" },
+  ]}
+  renderer="flow"
+  title="Artifact flow"
+/>
+
 ## Export choice
 
 <Comparison

@@ -1,4 +1,5 @@
 import { Button } from "./ui/button.jsx";
+import { Diagram } from "./diagram.jsx";
 
 const panelClassName = "border border-border bg-card p-5 text-card-foreground sm:p-6";
 const kickerClassName = "mb-3 font-geist-pixel text-[10px] tracking-[0.2em] text-muted-foreground uppercase";
@@ -145,6 +146,7 @@ export const components = {
   CodeBlock,
   Comparison,
   Decision,
+  Diagram,
   FileMap,
   Flow,
   Metric,
