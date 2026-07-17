@@ -1,6 +1,7 @@
-import { cp, mkdir, readFile, writeFile } from "node:fs/promises";
+import { cp, mkdir, writeFile } from "node:fs/promises";
 import { basename, dirname, resolve } from "node:path";
 import { buildSite } from "./build.mjs";
+import { getComponentContext } from "./component-context.mjs";
 import { resolveDocument } from "./document.mjs";
 import { publishSite } from "./publish.mjs";
 import { startPreviewSession } from "./preview-session.mjs";
@@ -17,7 +18,7 @@ Commands:
   servers
   stop --all
   skill install [--target .agents/skills]
-  components list`;
+  components list [file-or-directory]`;
 
 const argumentValue = (argumentsList, name) => {
   const index = argumentsList.indexOf(name);
@@ -51,11 +52,11 @@ const createSite = async ({ output, slug, title }) => {
 const defaultDependencies = {
   buildSite,
   createSite,
+  getComponentContext,
   installSkill,
   listPreviewServers,
   openBrowser,
   publishSite,
-  readFile,
   resolveDocument,
   startPreviewSession,
   stopPreviewServers,
@@ -71,7 +72,7 @@ export const runCli = async ({ argumentsList, dependencies = {}, write = console
   }
 
   if (command === "components" && commandArguments[0] === "list") {
-    write(await commands.readFile(resolve(pluginRoot, "components/REGISTRY.md"), "utf8"));
+    write(await commands.getComponentContext(commandArguments[1]));
     return;
   }
 

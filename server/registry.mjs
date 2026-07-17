@@ -11,8 +11,11 @@ export const componentsModule = resolve(pluginRoot, "components/index.jsx");
 const isComponentDescriptor = (component) =>
   typeof component === "object" &&
   component !== null &&
+  typeof component.description === "string" &&
+  typeof component.export === "string" &&
   typeof component.name === "string" &&
-  typeof component.module === "string";
+  typeof component.module === "string" &&
+  typeof component.when === "string";
 
 const findConfig = async (documentPath) => {
   let directory = dirname(documentPath);
@@ -33,7 +36,7 @@ const findConfig = async (documentPath) => {
 export const loadSiteConfiguration = async (documentPath) => {
   const configPath = await findConfig(documentPath);
   if (!configPath) {
-    return { components: [], theme: undefined, themeVersion: undefined };
+    return { components: [], configPath: undefined, theme: undefined, themeVersion: undefined };
   }
 
   const configUrl = pathToFileURL(configPath);
@@ -60,6 +63,7 @@ export const loadSiteConfiguration = async (documentPath) => {
       export: component.export ?? "default",
       module: resolve(dirname(configPath), component.module),
     })),
+    configPath,
     theme: themePath,
     themeVersion,
   };

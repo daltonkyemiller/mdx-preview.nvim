@@ -8,6 +8,7 @@ import { promisify } from "node:util";
 import test from "node:test";
 import { buildSite } from "../server/build.mjs";
 import { runCli } from "../server/cli.mjs";
+import { getComponentContext } from "../server/component-context.mjs";
 import { describeDocument, resolveDocument } from "../server/document.mjs";
 import { loadSiteConfiguration } from "../server/registry.mjs";
 import { startPreviewSession } from "../server/preview-session.mjs";
@@ -56,6 +57,15 @@ test("resolves a site directory and describes the document used by every rendere
   assert.equal(document.file, resolve("examples/custom-registry/index.mdx"));
   assert.equal(document.theme, resolve("examples/custom-registry/theme.css"));
   assert.equal(document.directory, resolve("examples/custom-registry"));
+});
+
+test("lists built-in and project-specific component context", async () => {
+  const context = await getComponentContext("examples/custom-registry");
+
+  assert.match(context, /## `Diagram`/);
+  assert.match(context, /## Project-specific components/);
+  assert.match(context, /### `StatusBadge`/);
+  assert.match(context, /Use when: Use for a compact status label near a plan title\./);
 });
 
 test("exports one HTML file when requested", async (context) => {
@@ -129,6 +139,24 @@ test("runs CLI commands through one command interface", async () => {
     ["open", "http://localhost:4330"],
   ]);
   assert.deepEqual(messages, ["Preview: http://localhost:4330"]);
+});
+
+test("asks the component command for context at the requested path", async () => {
+  const messages = [];
+  const paths = [];
+  await runCli({
+    argumentsList: ["components", "list", "plans/release"],
+    dependencies: {
+      getComponentContext: async (path) => {
+        paths.push(path);
+        return "Component context";
+      },
+    },
+    write: (message) => messages.push(message),
+  });
+
+  assert.deepEqual(paths, ["plans/release"]);
+  assert.deepEqual(messages, ["Component context"]);
 });
 
 test("rejects an invalid component registry", async (context) => {
