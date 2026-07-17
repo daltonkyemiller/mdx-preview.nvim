@@ -7,12 +7,20 @@
   color: var(--page-ink);
   font-family: var(--font-sans);
   font-kerning: normal;
+  font-feature-settings: "kern", "liga", "calt";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   min-height: 100vh;
   margin: 0;
   background: var(--page-paper);
+}
+
+::selection {
+  background: color-mix(in oklab, var(--primary) 18%, transparent);
 }
 
 #root {
@@ -73,6 +81,13 @@ body {
   padding: clamp(2rem, 5vw, 5rem) clamp(1.25rem, 5vw, 4rem) clamp(3rem, 7vw, 7rem);
 }
 
+/* Vertical rhythm: give every top-level block consistent breathing room so any
+   authored document — even one that stacks components — never collides. Headings
+   and rules set their own larger spacing below. */
+.document-frame > * + * {
+  margin-top: 1.75rem;
+}
+
 .document-frame > :first-child {
   margin-top: 0;
 }
@@ -83,54 +98,167 @@ body {
   font-family: var(--font-mondwest);
   font-weight: 400;
   letter-spacing: -0.055em;
+  text-wrap: balance;
 }
 
 .document-frame h1 {
-  max-width: 10ch;
+  max-width: 14ch;
   margin: 0 0 clamp(2.5rem, 6vw, 5rem);
   font-size: clamp(3.5rem, 10vw, 8.5rem);
   line-height: 0.82;
 }
 
+.document-frame > h2 {
+  margin-top: clamp(3.5rem, 8vw, 7rem);
+}
+
 .document-frame h2 {
-  margin: clamp(4rem, 9vw, 8rem) 0 1.25rem;
+  margin-bottom: 1.25rem;
   font-size: clamp(2rem, 5vw, 4.5rem);
   line-height: 0.9;
 }
 
+.document-frame > h3 {
+  margin-top: 2.75rem;
+}
+
 .document-frame h3 {
-  margin: 2.5rem 0 0.75rem;
+  margin-bottom: 0.75rem;
   font-size: clamp(1.5rem, 3vw, 2.25rem);
   line-height: 0.95;
 }
 
 .document-frame p,
 .document-frame li {
-  max-width: 66ch;
-  font-size: 1rem;
-  line-height: 1.65;
+  max-width: 68ch;
+  font-size: 1.02rem;
+  line-height: 1.7;
 }
 
 .document-frame p {
-  margin-block: 1rem;
+  text-wrap: pretty;
 }
 
 .document-frame a {
   color: inherit;
-  text-decoration-color: var(--page-muted);
+  text-decoration-line: underline;
+  text-decoration-color: color-mix(in oklab, var(--page-muted) 70%, transparent);
   text-decoration-thickness: 1px;
-  text-underline-offset: 0.22em;
+  text-underline-offset: 0.2em;
+  transition: text-decoration-color 0.15s ease;
+}
+
+.document-frame a:hover {
+  text-decoration-color: var(--page-ink);
+  text-decoration-thickness: 2px;
 }
 
 .document-frame img {
   max-width: 100%;
   border: 1px solid var(--page-rule);
+  border-radius: var(--radius);
 }
 
 .document-frame pre {
   overflow: auto;
   border: 1px solid var(--page-rule);
+  border-radius: var(--radius);
   background: var(--muted);
+}
+
+/* Raw Markdown elements — remark output carries no class, unlike the built-in
+   components. Scoping to :not([class]) restyles authored Markdown (lists,
+   quotes, tables, rules, inline code) without touching component internals. */
+.document-frame :is(ul, ol):not([class]) {
+  max-width: 68ch;
+  margin-block: 0;
+  padding-left: 1.5rem;
+}
+
+.document-frame ul:not([class]) {
+  list-style: disc;
+}
+
+.document-frame ol:not([class]) {
+  list-style: decimal;
+}
+
+.document-frame :is(ul, ol):not([class]) li {
+  margin-block: 0.4rem;
+  padding-left: 0.35rem;
+}
+
+.document-frame :is(ul, ol):not([class]) li::marker {
+  color: var(--page-muted);
+}
+
+.document-frame :is(ul, ol):not([class]) :is(ul, ol) {
+  margin-top: 0.4rem;
+}
+
+.document-frame blockquote:not([class]) {
+  max-width: 68ch;
+  margin-block: 0;
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  border-left: 2px solid var(--page-ink);
+  color: var(--page-muted);
+  font-style: italic;
+}
+
+.document-frame blockquote:not([class]) p {
+  margin: 0;
+}
+
+.document-frame hr:not([class]) {
+  height: 0;
+  margin-block: clamp(2.5rem, 6vw, 4rem);
+  border: 0;
+  border-top: 1px solid var(--page-rule);
+}
+
+.document-frame :not(pre) > code:not([class]) {
+  padding: 0.12em 0.36em;
+  border-radius: calc(var(--radius) * 0.75);
+  background: var(--muted);
+  font-size: 0.9em;
+}
+
+.document-frame table:not([class]) {
+  width: 100%;
+  max-width: 68ch;
+  margin-block: 0;
+  border: 1px solid var(--page-rule);
+  border-radius: var(--radius);
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.document-frame table:not([class]) :is(th, td) {
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid var(--page-rule);
+  text-align: left;
+  vertical-align: top;
+}
+
+.document-frame table:not([class]) th:not(:last-child),
+.document-frame table:not([class]) td:not(:last-child) {
+  border-right: 1px solid var(--page-rule);
+}
+
+.document-frame table:not([class]) tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+.document-frame table:not([class]) thead th {
+  background: var(--muted);
+  font-family: var(--font-geist-pixel);
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--page-muted);
 }
 
 .diagram-flow .react-flow__controls {

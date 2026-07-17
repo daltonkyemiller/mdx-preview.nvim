@@ -1,15 +1,15 @@
 import { Button } from "./ui/button.jsx";
 import { Diagram } from "./diagram.jsx";
 
-const panelClassName = "border border-border bg-card p-5 text-card-foreground sm:p-6";
+const panelClassName = "rounded-[var(--radius)] border border-border bg-card p-5 text-card-foreground sm:p-6";
 const kickerClassName = "mb-3 font-geist-pixel text-[10px] tracking-[0.2em] text-muted-foreground uppercase";
 const listClassName = "grid list-none border-y border-border p-0";
 
 export function Callout({ children, title = "Note", tone = "info" }) {
   const toneClassNames = {
-    danger: "border-destructive/45 bg-destructive/10",
-    info: "border-primary/35 bg-primary/[0.07]",
-    warning: "border-warning/45 bg-warning/10",
+    danger: "border-l-4 border-destructive/45 border-l-destructive bg-destructive/10",
+    info: "border-l-4 border-primary/25 border-l-primary/70 bg-primary/[0.06]",
+    warning: "border-l-4 border-warning/45 border-l-warning bg-warning/10",
   };
 
   return (
@@ -40,7 +40,7 @@ export function Flow({ steps }) {
 
 export function Comparison({ left, right }) {
   return (
-    <div className="grid gap-px overflow-hidden border border-border bg-border sm:grid-cols-2">
+    <div className="grid gap-px overflow-hidden rounded-[var(--radius)] border border-border bg-border sm:grid-cols-2">
       <section className={`${panelClassName} border-0`}>
         <p className={kickerClassName}>{left.label}</p>
         <h2>{left.title}</h2>
@@ -127,7 +127,7 @@ export function Metric({ label, value, detail }) {
   return (
     <section className={panelClassName}>
       <p className={kickerClassName}>{label}</p>
-      <strong className="block font-mondwest text-5xl leading-none font-normal tracking-tight sm:text-7xl">
+      <strong className="mt-1 block font-mondwest text-5xl leading-none font-normal tracking-tight sm:text-6xl">
         {value}
       </strong>
       {detail ? <p className="mb-0 text-muted-foreground">{detail}</p> : null}
@@ -137,7 +137,7 @@ export function Metric({ label, value, detail }) {
 
 export function Architecture({ nodes }) {
   return (
-    <div className="grid gap-px overflow-hidden border border-border bg-border sm:grid-cols-[repeat(auto-fit,minmax(15rem,1fr))]">
+    <div className="grid gap-px overflow-hidden rounded-[var(--radius)] border border-border bg-border sm:grid-cols-[repeat(auto-fit,minmax(15rem,1fr))]">
       {nodes.map((node) => (
         <section className={`${panelClassName} border-0`} key={node.title}>
           <p className={kickerClassName}>{node.label}</p>
@@ -151,7 +151,7 @@ export function Architecture({ nodes }) {
 
 export function CodeBlock({ children, language = "text", title }) {
   return (
-    <section className="overflow-hidden border border-border bg-card">
+    <section className="overflow-hidden rounded-[var(--radius)] border border-border bg-card">
       <header className="border-b border-border px-4 py-2.5 font-geist-pixel text-[10px] tracking-[0.18em] text-muted-foreground uppercase">
         <span>{title ?? language}</span>
       </header>

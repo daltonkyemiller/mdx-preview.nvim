@@ -1,6 +1,7 @@
 import { compile } from "@mdx-js/mdx";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
+import remarkGfm from "remark-gfm";
 import { createRegistryModule, componentsModule, pluginRoot, resolveRuntimeModules } from "./registry.mjs";
 
 const componentsVirtualModule = "virtual:mdx-preview-components";
@@ -18,6 +19,7 @@ const mdxPlugin = {
       jsxImportSource: "react",
       outputFormat: "program",
       providerImportSource: "@mdx-js/react",
+      remarkPlugins: [remarkGfm],
     });
     return String(compiled);
   },

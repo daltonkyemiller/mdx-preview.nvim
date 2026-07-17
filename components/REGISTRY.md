@@ -2,7 +2,9 @@
 
 Use these components from `mdx-preview/components`. They are available without an import through the MDX provider, but importing them makes the document portable and explicit.
 
-The built-ins use Tailwind utilities and shared CSS variable tokens. Override the token values in a site CSS file for `:root`, `:root[data-theme="dark"]`, and the `prefers-color-scheme` system fallback, or replace a component through `mdx-preview.config.mjs`. Interactive primitives use Base UI under the same shadcn-style API.
+Standard Markdown is styled to the same editorial standard as the components, so reach for a component only when it clarifies a relationship. Headings, body prose, lists, blockquotes, horizontal rules, inline code, and GFM tables (`| col | col |`) all render cleanly out of the box — a plain Markdown table is often the right call for tabular data.
+
+The built-ins use Tailwind utilities and shared CSS variable tokens. Override the token values in a site CSS file for `:root`, `:root[data-theme="dark"]`, and the `prefers-color-scheme` system fallback, or replace a component through `mdx-preview.config.mjs`. Interactive primitives use Base UI under the same shadcn-style API. Surface tokens: `--background`, `--foreground`, `--card`, `--card-foreground`, `--border`, `--muted`, `--muted-foreground`, `--primary`, `--primary-foreground`, `--destructive`, `--warning`, `--ring`, and `--radius` (defaults to `0` for a sharp editorial look; set e.g. `0.5rem` to round every surface at once).
 
 ## `Button`
 

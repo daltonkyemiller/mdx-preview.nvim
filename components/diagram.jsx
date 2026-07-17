@@ -34,7 +34,7 @@ export function Diagram({
   }
 
   return (
-    <figure className="my-8 overflow-hidden border border-border bg-muted/35">
+    <figure className="my-8 overflow-hidden rounded-[var(--radius)] border border-border bg-muted/35">
       <div className="overflow-x-auto p-4 sm:p-6">
         <div className="relative" style={{ height: layout.height, width: layout.width }}>
           <svg
@@ -62,7 +62,7 @@ export function Diagram({
           <ol aria-label={title} className="m-0 list-none p-0">
             {layout.nodes.map((node) => (
               <li
-                className="absolute flex h-[92px] w-[208px] flex-col justify-between border border-foreground bg-card p-4 text-card-foreground shadow-[4px_4px_0_var(--border)]"
+                className="absolute flex h-[92px] w-[208px] flex-col justify-between rounded-[var(--radius)] border border-foreground bg-card p-4 text-card-foreground shadow-[3px_3px_0_var(--border)]"
                 key={node.id}
                 style={{ left: node.x, top: node.y }}
               >
