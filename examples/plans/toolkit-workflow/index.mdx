@@ -1,0 +1,95 @@
+import "./theme.css";
+
+# MDX site toolkit
+
+This is a checked-in plan, not a chat-only artifact. It uses ordinary Markdown for the narrative and components only where the structure benefits from a visual treatment.
+
+<Callout title="Outcome">
+  An agent or teammate can author this file, preview it locally, switch the viewer theme, export one HTML file, or build
+  a static directory without creating a separate app.
+</Callout>
+
+## The loop
+
+<Flow
+  steps={[
+    { title: "Author", detail: "Write a durable index.mdx next to any local assets or custom components." },
+    { title: "Preview", detail: "Run the local Vite viewer and use System, Light, or Dark while reviewing." },
+    { title: "Share", detail: "Export a single HTML file or build a static directory when the plan is ready." },
+  ]}
+/>
+
+## What owns what
+
+<Architecture
+  nodes={[
+    { label: "Source", title: "MDX", detail: "Narrative, imports, and lightweight React." },
+    { label: "Visual system", title: "Components", detail: "Tailwind-first primitives and plan views." },
+    { label: "Runtime", title: "Preview server", detail: "Local rendering, theme controls, and export." },
+    { label: "Artifact", title: "Static HTML", detail: "A portable output for review, hosting, or Here Now." },
+  ]}
+/>
+
+## Export choice
+
+<Comparison
+  left={{
+    label: "Default",
+    title: "Static directory",
+    detail: "Use this for a reliable deployable site with normal asset caching.",
+  }}
+  right={{
+    label: "Portable",
+    title: "Single HTML file",
+    detail: "Use this when someone needs one document to open or attach.",
+  }}
+/>
+
+<Decision
+  status="Recommended"
+  title="Keep the source in version control"
+  rationale="The MDX file remains easy to review and evolve. Built output is a delivery format, not the only copy of the plan."
+/>
+
+## Actual surfaces
+
+<FileMap
+  files={[
+    { path: "examples/plans/toolkit-workflow/index.mdx", detail: "The source plan you are reading." },
+    { path: "examples/plans/toolkit-workflow/theme.css", detail: "A small local theme override for both color modes." },
+    { path: "components/REGISTRY.md", detail: "Agent-readable guidance for built-in and custom components." },
+    { path: "bin/mdx-preview.mjs", detail: "The standalone CLI for new, serve, build, and publish." },
+  ]}
+/>
+
+## Try it
+
+<CodeBlock language="sh" title="Preview and export">
+  pnpm mdx-preview serve examples/plans/toolkit-workflow --open pnpm mdx-preview build examples/plans/toolkit-workflow
+  --out dist/toolkit-workflow pnpm mdx-preview build examples/plans/toolkit-workflow --out dist/toolkit-workflow-html
+  --single-file
+</CodeBlock>
+
+Use the toolbar at the top of the viewer to test the theme controls and download a standalone HTML export. The exported file keeps the System color preference behavior; a normal static build is the better choice for a published site.
+
+## Review milestones
+
+<Timeline
+  events={[
+    {
+      label: "Write",
+      title: "Keep the plan concrete",
+      detail: "Use real file paths, decisions, and acceptance criteria.",
+    },
+    {
+      label: "Review",
+      title: "Check it in the browser",
+      detail: "Look at light, dark, and narrow layouts before sharing.",
+    },
+    {
+      label: "Deliver",
+      title: "Build or publish",
+      detail: "Choose a static directory by default and publish only with approval.",
+    },
+  ]}
+/>
