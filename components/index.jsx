@@ -100,6 +100,29 @@ export function Timeline({ events }) {
   );
 }
 
+export function TableOfContents({ items, title = "Contents" }) {
+  return (
+    <nav aria-label={title} className="my-8 border-y border-border py-3">
+      <p className={kickerClassName}>{title}</p>
+      <ol className="m-0 grid list-none gap-1 p-0">
+        {items.map((item, index) => (
+          <li key={item.id}>
+            <a
+              className="grid grid-cols-[2rem_minmax(0,1fr)] gap-3 px-2 py-2 no-underline transition-colors hover:bg-muted focus-visible:bg-muted focus-visible:outline-none"
+              href={`#${item.id}`}
+            >
+              <span className="font-geist-pixel text-xs tracking-[0.12em] text-muted-foreground">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <span>{item.label}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
+
 export function Metric({ label, value, detail }) {
   return (
     <section className={panelClassName}>
@@ -139,6 +162,8 @@ export function CodeBlock({ children, language = "text", title }) {
   );
 }
 
+export { Button, Diagram };
+
 export const components = {
   Architecture,
   Button,
@@ -150,5 +175,6 @@ export const components = {
   FileMap,
   Flow,
   Metric,
+  TableOfContents,
   Timeline,
 };

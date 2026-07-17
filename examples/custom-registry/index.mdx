@@ -1,15 +1,39 @@
-import { Callout } from "mdx-preview/components";
+import { Callout, Diagram, TableOfContents } from "mdx-preview/components";
 
 # Registry example
+
+<TableOfContents
+  items={[
+    { id: "registry", label: "Registry" },
+    { id: "output", label: "Output" },
+  ]}
+/>
+
+<h2 id="registry">Registry</h2>
 
 <Callout title="Built-in import">This component is imported from the built-in registry.</Callout>
 
 <StatusBadge>Loaded from mdx-preview.config.mjs</StatusBadge>
+
+<h2 id="output">Output</h2>
 
 <Architecture
   nodes={[
     { label: "Author", title: "MDX" },
     { label: "Registry", title: "Custom component" },
     { label: "Output", title: "Static site" },
+  ]}
+/>
+
+<Diagram
+  title="Registry resolution"
+  nodes={[
+    { id: "built-in", label: "Built-ins" },
+    { id: "custom", label: "Custom registry" },
+    { id: "document", label: "Document" },
+  ]}
+  edges={[
+    { from: "built-in", to: "document" },
+    { from: "custom", to: "document" },
   ]}
 />

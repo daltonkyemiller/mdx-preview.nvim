@@ -76,6 +76,7 @@ test("exports one HTML file when requested", async (context) => {
 
   assert.deepEqual(await readdir(output), ["index.html"]);
   assert.match(await readFile(resolve(output, "index.html"), "utf8"), /Loaded from mdx-preview.config.mjs/);
+  assert.match(await readFile(resolve(output, "index.html"), "utf8"), /Registry resolution/);
 });
 
 test("exports standalone HTML from the preview session", async (context) => {

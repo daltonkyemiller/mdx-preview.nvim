@@ -96,7 +96,7 @@ Built-ins make relationships easier to read without falling back to a pile of ad
 <Flow steps={[{ title: "Write", detail: "Create the MDX artifact." }, { title: "Preview" }, { title: "Share" }]} />
 ```
 
-Run `mdx-preview components list <file-or-directory>` for the complete component context available to an artifact. It includes built-ins such as `Button`, `Callout`, `Flow`, `Comparison`, `FileMap`, `Decision`, `Timeline`, `Metric`, `Architecture`, `Diagram`, and `CodeBlock`, followed by custom components resolved from the nearest `mdx-preview.config.mjs`.
+Run `mdx-preview components list <file-or-directory>` for the complete component context available to an artifact. It includes built-ins such as `Button`, `Callout`, `Flow`, `Comparison`, `FileMap`, `Decision`, `Timeline`, `TableOfContents`, `Metric`, `Architecture`, `Diagram`, and `CodeBlock`, followed by custom components resolved from the nearest `mdx-preview.config.mjs`.
 
 `Diagram` is the default directed-diagram tool. Agents provide concise nodes and edges; Dagre supplies deterministic spacing and arrow routing so diagrams remain readable without manual coordinate work. Set `renderer="flow"` for an opt-in read-only React Flow canvas with pan, zoom, and fit-view controls. See the [component registry](components/REGISTRY.md#diagram) and the [example plan](examples/plans/toolkit-workflow/index.mdx).
 

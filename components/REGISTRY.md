@@ -85,6 +85,24 @@ Use for phases, milestones, or ordered delivery work.
 
 Props: `events: Array<{ label: string, title: string, detail?: string }>`.
 
+## `TableOfContents`
+
+Use near the top of a structured plan with five or more named sections. It gives a reviewer a compact overview and in-page navigation. Give each item a short label and a stable `id`; add the same id to its matching heading. Do not use it for a short note or a document with only a few sections.
+
+```mdx
+<TableOfContents
+  items={[
+    { id: "scope", label: "Scope" },
+    { id: "rollout", label: "Rollout" },
+    { id: "risks", label: "Risks" },
+  ]}
+/>
+
+<h2 id="scope">Scope</h2>
+```
+
+Props: `title?: string`, `items: Array<{ id: string, label: string }>`.
+
 ## `Metric`
 
 Use for one meaningful number. Do not use it as decorative filler.

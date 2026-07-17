@@ -17,7 +17,7 @@ Create durable source artifacts, not chat-only plans. Keep plan content in local
    ```
 
 3. Run `mdx-preview components list plans/<slug>` to load the built-in and project-specific components available to that artifact. Use the smallest set that clarifies the artifact; do not pad a plan with decorative metrics or diagrams.
-4. Write `index.mdx`. Use MDX imports and exports at the top level. Export local React components rather than declaring bare functions.
+4. Write `index.mdx`. Use MDX imports and exports at the top level. Export local React components rather than declaring bare functions. For a substantial plan, write a short summary, then a `TableOfContents` before the first main section. Give every TOC item and matching heading the same stable `id`.
 5. Preview with `mdx-preview serve plans/<slug> --open`.
 6. Build a shareable static directory with `mdx-preview build plans/<slug> --out dist/<slug>`.
 7. Publish only when asked, using `mdx-preview publish plans/<slug> --out dist/<slug>`. This reads `HERENOW_API_KEY` when present; otherwise it creates a 24-hour anonymous site and prints its claim URL.
@@ -47,6 +47,8 @@ Add a `description`, `when`, props, and an example to the project's own agent in
 ## Site discipline
 
 - Keep standard Markdown as the default. Use React components only when they clarify a relationship, comparison, state, or interaction.
+- Default to human digestion over information density. Give the reader a clear title and one-paragraph summary; use a TOC for five or more main sections; make headings answer-oriented; open each section with its conclusion before supporting detail; keep paragraphs short; and use lists, tables, or one focused component when they scan better than prose.
+- Preserve visual rhythm: prefer four to eight main sections, one idea per section, generous separation between major sections, and a readable narrative width. Do not build a wall of text, a dashboard of decorative cards, or a component at every heading unless the user explicitly asks for a denser or more expressive treatment.
 - Use `Flow` for sequence, `Architecture` for ownership, `Diagram` for a directed handoff or dependency graph, `Comparison` for two alternatives, and `FileMap` for multi-file change surfaces.
 - For `Diagram`, provide short `nodes` and `edges`, never manual positions. Keep it to eight nodes and twelve edges, avoid cycles, and split unrelated relationships into separate diagrams. Use `renderer="flow"` only when pan, zoom, and fit-view improve review; keep the static renderer for a compact finished document. Do not use a diagram when a `Flow` or short table is easier to scan.
 - Build a static directory as the canonical export. Use `--single-file` only when a recipient explicitly needs one HTML file.
