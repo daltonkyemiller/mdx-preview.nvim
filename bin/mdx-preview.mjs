@@ -6,6 +6,7 @@ import { buildSite } from "../server/build.mjs";
 import { publishSite } from "../server/publish.mjs";
 import { startPreviewServer } from "../server/server.mjs";
 import { pluginRoot } from "../server/registry.mjs";
+import { listPreviewServers, stopPreviewServers } from "../server/servers.mjs";
 
 const usage = `mdx-preview <command> [path]
 
@@ -14,6 +15,8 @@ Commands:
   serve <file-or-directory> [--port 4321] [--open]
   build <file-or-directory> [--out dist] [--single-file]
   publish <file-or-directory> [--out dist] [--slug name]
+  servers
+  stop --all
   skill install [--target .agents/skills]
   components list`;
 
@@ -97,13 +100,30 @@ if (command === "new") {
   process.exit(0);
 }
 
+if (command === "servers") {
+  const servers = await listPreviewServers();
+  if (servers.length === 0) {
+    console.log("No mdx-preview servers running.");
+  } else {
+    console.log("PORT  FILE");
+    servers.forEach((server) => console.log(`${server.port}  ${server.file}`));
+  }
+  process.exit(0);
+}
+
+if (command === "stop" && argumentsList.includes("--all")) {
+  const servers = await stopPreviewServers();
+  console.log(`Stopped ${servers.length} mdx-preview server${servers.length === 1 ? "" : "s"}.`);
+  process.exit(0);
+}
+
 const documentPath = await resolveDocument(argumentsList[0] ?? ".");
 const outDir = resolve(argumentValue(argumentsList, "--out") ?? "dist");
 
 if (command === "serve") {
   const port = Number(argumentValue(argumentsList, "--port") ?? 4321);
   const server = await startPreviewServer({ file: documentPath, port });
-  const url = `http://localhost:${port}`;
+  const url = `http://localhost:${server.mdxPreviewPort}`;
   server.printUrls();
   if (argumentsList.includes("--open")) {
     await openBrowser(url);

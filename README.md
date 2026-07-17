@@ -61,6 +61,13 @@ cd /tmp/plans
 mdx-preview serve ./foo/foo.mdx --open
 ```
 
+List preview servers that `mdx-preview` started, or close all of them:
+
+```sh
+mdx-preview servers
+mdx-preview stop --all
+```
+
 A site directory needs one of `index.mdx`, `index.md`, `README.mdx`, or `README.md`.
 
 `build` is the canonical shareable export. It produces a static `index.html` and assets that work on any static host. `--single-file` inlines JavaScript and CSS into one HTML file when a recipient explicitly needs a portable file.
