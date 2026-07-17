@@ -1,16 +1,12 @@
 # mdx-preview.nvim
 
-Preview Markdown and MDX from Neovim in a browser. It runs a local Vite server, renders MDX with React, and follows the active `.md` or `.mdx` buffer when configured to do so.
+`mdx-preview.nvim` is a local MDX-site toolkit with a Neovim entry point. Use it to preview Markdown and MDX, generate visual plans as local files, build static sites, and publish a finished artifact.
 
-React imports work relative to the MDX file. Tailwind v4 utilities work out of the box.
-
-## Requirements
-
-- Neovim 0.10 or newer
-- Node.js 20 or newer
-- pnpm 11
+React imports resolve relative to the MDX document. Tailwind v4 utilities and the built-in visual component registry work without adding a separate site app to each project.
 
 ## Install
+
+Requirements: Neovim 0.10+, Node.js 20+, and pnpm 11.
 
 With [lazy.nvim](https://github.com/folke/lazy.nvim):
 
@@ -24,11 +20,9 @@ With [lazy.nvim](https://github.com/folke/lazy.nvim):
 }
 ```
 
-For another plugin manager, install the plugin and run `pnpm install --frozen-lockfile` in its checkout. Then call `require("mdx-preview").setup()` during Neovim startup.
+For a manual install, run `pnpm install --frozen-lockfile` in the plugin checkout.
 
-## Configuration
-
-These are the defaults:
+## Neovim
 
 ```lua
 require("mdx-preview").setup({
@@ -38,38 +32,74 @@ require("mdx-preview").setup({
 })
 ```
 
-`open_browser` controls whether `:MdxPreview` opens the local URL. `follow_buffer` updates the existing preview when you enter another Markdown or MDX buffer.
+- `:MdxPreview` starts the local server and renders the current `.md` or `.mdx` file.
+- `:MdxPreviewStop` stops it.
 
-## Commands
+When `follow_buffer` is enabled, entering another Markdown or MDX buffer changes the existing browser preview. Saving the document refreshes it.
 
-- `:MdxPreview` starts the local preview server and renders the current `.md` or `.mdx` file.
-- `:MdxPreviewStop` stops the server.
+## Standalone CLI
 
-Starting preview again while the server is already running changes the rendered file. Saving the active document refreshes the browser preview.
+Use the CLI without Neovim from this checkout:
 
-## MDX and React
-
-MDX supports top-level ESM imports and exports. Export local components, or import them from a neighboring file:
-
-```mdx
-import { Callout } from "./components/callout.jsx";
-
-export function Status({ children }) {
-  return <strong>{children}</strong>;
-}
-
-# Hello
-
-<Callout>
-  <Status>Rendered by React.</Status>
-</Callout>
+```sh
+pnpm mdx-preview serve path/to/site --open
+pnpm mdx-preview build path/to/site --out dist/site
+pnpm mdx-preview build path/to/site --out dist/site --single-file
 ```
 
-MDX does not allow a bare top-level `function` or `const` declaration. Export it instead.
+A site directory needs one of `index.mdx`, `index.md`, `README.mdx`, or `README.md`.
 
-## Tailwind
+`build` is the canonical shareable export. It produces a static `index.html` and assets that work on any static host. `--single-file` inlines JavaScript and CSS into one HTML file when a recipient explicitly needs a portable file.
 
-Tailwind CSS v4 is included with the preview server. Utility classes in the active MDX file and its directory are scanned automatically:
+## Local plans and sites
+
+Create an artifact that can live in source control:
+
+```sh
+pnpm mdx-preview new checkout-flow --out plans --title "Checkout flow"
+pnpm mdx-preview serve plans/checkout-flow --open
+pnpm mdx-preview build plans/checkout-flow --out dist/checkout-flow
+```
+
+The default `plans/<slug>/` convention is intentional. It gives agents and people one durable MDX artifact to review, edit, build, and publish.
+
+## Components
+
+Built-ins make relationships easier to read without falling back to a pile of ad hoc HTML:
+
+```mdx
+<Callout title="Decision">Static directories are the reliable export format.</Callout>
+
+<Flow steps={[{ title: "Write", detail: "Create the MDX artifact." }, { title: "Preview" }, { title: "Share" }]} />
+```
+
+Use `pnpm mdx-preview components list` for the complete registry. It includes `Callout`, `Flow`, `Comparison`, `FileMap`, `Decision`, `Timeline`, `Metric`, `Architecture`, and `CodeBlock`, plus when each component is useful.
+
+MDX only allows top-level ESM imports and exports. Export local components instead of declaring a bare top-level `function` or `const`.
+
+## Custom component registry
+
+Add `mdx-preview.config.mjs` beside a site or in an ancestor directory:
+
+```js
+export default {
+  components: [
+    {
+      name: "StatusBadge",
+      module: "./components/status-badge.jsx",
+      export: "StatusBadge",
+      description: "Show the current state of a plan or release.",
+      when: "Use for a compact status label near a title.",
+    },
+  ],
+};
+```
+
+Registered components are available to every MDX file below that config. Keep a component's `description`, `when`, props, and example in your project’s agent instructions so agents know how to use it, not just how to import it. See [the example](examples/custom-registry).
+
+## Tailwind and CSS
+
+Tailwind v4 scans the directory containing the active MDX file, including nearby components:
 
 ```mdx
 <section className="rounded-xl bg-slate-900 p-8 text-white shadow-xl">
@@ -77,19 +107,31 @@ Tailwind CSS v4 is included with the preview server. Utility classes in the acti
 </section>
 ```
 
-The preview uses Tailwind's default v4 theme. It does not load a project's Tailwind configuration, plugins, or custom theme yet.
-
-## CSS
-
-Import a stylesheet from the MDX file when the document needs custom styles:
+The default theme is bundled with the preview. Import a neighboring CSS file from MDX when the document needs custom styles:
 
 ```mdx
 import "./article.css";
-
-<article className="article">...</article>
 ```
 
-Vite resolves that stylesheet relative to the MDX file.
+Project-specific Tailwind themes and plugins are intentionally not loaded automatically.
+
+## Agent skill
+
+The repo ships an installable `mdx-sites` skill. It tells agents to write durable local MDX plans, consult the component registry, validate in the browser, and only publish with approval.
+
+```sh
+pnpm mdx-preview skill install --target .agents/skills
+```
+
+## Here Now
+
+Build first, then publish when the artifact is ready:
+
+```sh
+pnpm mdx-preview publish plans/checkout-flow --out dist/checkout-flow
+```
+
+The command reads `HERENOW_API_KEY` for a permanent deployment. Without it, Here Now creates a 24-hour anonymous site and prints the one-time claim URL. Keep `.herenow/` out of source control. Here Now can then apply password or restricted access policies to a claimed site.
 
 ## Development
 
@@ -101,4 +143,4 @@ pnpm check
 luac -p lua/mdx-preview/init.lua
 ```
 
-`oxfmt` formats JavaScript, JSX, CSS, and JSON. Lua is checked with `luac`.
+`oxfmt` formats JavaScript, JSX, CSS, JSON, Markdown, and MDX. Lua is checked with `luac`.

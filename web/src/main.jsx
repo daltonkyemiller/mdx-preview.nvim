@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
+import { MDXProvider } from "@mdx-js/react";
 import "./styles.css";
 
 const POLL_INTERVAL_MS = 500;
+const componentRegistryUrl = (file) => `/@id/virtual:mdx-preview-components?file=${encodeURIComponent(file)}`;
 
 function Preview() {
   const [document, setDocument] = useState(null);
+  const [components, setComponents] = useState({});
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -28,11 +31,13 @@ function Preview() {
         await import(
           /* @vite-ignore */ `/src/tailwind.css?source=${encodeURIComponent(nextDocument.directory)}&t=${nextDocument.version}`
         );
+        const registry = await import(/* @vite-ignore */ componentRegistryUrl(nextDocument.file));
         const module = await import(
           /* @vite-ignore */ `/@fs/${nextDocument.file}?mdx-preview&t=${nextDocument.version}`
         );
         if (active) {
           setDocument(() => module.default);
+          setComponents(registry.components);
           setError(null);
         }
       } catch (nextError) {
@@ -59,7 +64,11 @@ function Preview() {
   }
 
   const Document = document;
-  return <Document />;
+  return (
+    <MDXProvider components={components}>
+      <Document />
+    </MDXProvider>
+  );
 }
 
 createRoot(document.getElementById("root")).render(<Preview />);

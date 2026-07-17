@@ -1,0 +1,15 @@
+import { Callout } from "mdx-preview/components";
+
+# Registry example
+
+<Callout title="Built-in import">This component is imported from the built-in registry.</Callout>
+
+<StatusBadge>Loaded from mdx-preview.config.mjs</StatusBadge>
+
+<Architecture
+  nodes={[
+    { label: "Author", title: "MDX" },
+    { label: "Registry", title: "Custom component" },
+    { label: "Output", title: "Static site" },
+  ]}
+/>
