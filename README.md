@@ -51,6 +51,8 @@ A site directory needs one of `index.mdx`, `index.md`, `README.mdx`, or `README.
 
 `build` is the canonical shareable export. It produces a static `index.html` and assets that work on any static host. `--single-file` inlines JavaScript and CSS into one HTML file when a recipient explicitly needs a portable file.
 
+When previewing in the browser, the **Export HTML** button downloads that same self-contained HTML artifact directly. It builds locally and does not upload the document anywhere.
+
 ## Local plans and sites
 
 Create an artifact that can live in source control:
@@ -73,7 +75,7 @@ Built-ins make relationships easier to read without falling back to a pile of ad
 <Flow steps={[{ title: "Write", detail: "Create the MDX artifact." }, { title: "Preview" }, { title: "Share" }]} />
 ```
 
-Use `pnpm mdx-preview components list` for the complete registry. It includes `Callout`, `Flow`, `Comparison`, `FileMap`, `Decision`, `Timeline`, `Metric`, `Architecture`, and `CodeBlock`, plus when each component is useful.
+Use `pnpm mdx-preview components list` for the complete registry. It includes `Button`, `Callout`, `Flow`, `Comparison`, `FileMap`, `Decision`, `Timeline`, `Metric`, `Architecture`, and `CodeBlock`, plus when each component is useful.
 
 MDX only allows top-level ESM imports and exports. Export local components instead of declaring a bare top-level `function` or `const`.
 
@@ -97,9 +99,38 @@ export default {
 
 Registered components are available to every MDX file below that config. Keep a component's `description`, `when`, props, and example in your project’s agent instructions so agents know how to use it, not just how to import it. See [the example](examples/custom-registry).
 
-## Tailwind and CSS
+## Tailwind, Base UI, and themes
 
-Tailwind v4 scans the directory containing the active MDX file, including nearby components:
+Tailwind v4 scans the active document directory and the bundled component kit. The built-ins are Tailwind-first and use CSS variables as their theme contract; Base UI powers interactive primitives such as `Button` without imposing an opaque component library.
+
+The viewer defaults to the browser preference. Its **System**, **Light**, and **Dark** controls set a local preference without changing the MDX file. Override both palettes from an imported neighboring CSS file:
+
+```css
+:root {
+  --background: oklch(0.98 0.01 100);
+  --foreground: oklch(0.2 0.02 255);
+  --primary: oklch(0.48 0.14 230);
+  --border: oklch(0.8 0.02 255);
+}
+
+:root[data-theme="dark"] {
+  --background: oklch(0.16 0.02 255);
+  --foreground: oklch(0.95 0.01 100);
+  --primary: oklch(0.72 0.14 230);
+  --border: oklch(0.34 0.03 255);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --background: oklch(0.16 0.02 255);
+    --foreground: oklch(0.95 0.01 100);
+    --primary: oklch(0.72 0.14 230);
+    --border: oklch(0.34 0.03 255);
+  }
+}
+```
+
+Use Tailwind utilities in MDX or nearby custom components:
 
 ```mdx
 <section className="rounded-xl bg-slate-900 p-8 text-white shadow-xl">
@@ -113,7 +144,7 @@ The default theme is bundled with the preview. Import a neighboring CSS file fro
 import "./article.css";
 ```
 
-Project-specific Tailwind themes and plugins are intentionally not loaded automatically.
+Project-specific Tailwind themes and plugins are intentionally not loaded automatically. Add custom components through the registry when a project needs its own abstractions.
 
 ## Agent skill
 

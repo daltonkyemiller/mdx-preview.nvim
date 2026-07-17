@@ -49,4 +49,5 @@ Add a `description`, `when`, props, and an example to the project's own agent in
 - Keep standard Markdown as the default. Use React components only when they clarify a relationship, comparison, state, or interaction.
 - Use `Flow` for sequence, `Architecture` for ownership, `Comparison` for two alternatives, and `FileMap` for multi-file change surfaces.
 - Build a static directory as the canonical export. Use `--single-file` only when a recipient explicitly needs one HTML file.
+- Keep theme overrides token-based. Define light values in `:root`, explicit dark values in `:root[data-theme="dark"]`, and system-dark values in `prefers-color-scheme` so the viewer controls remain meaningful.
 - Do not publish private material without explicit approval. Keep `.herenow/` out of source control.

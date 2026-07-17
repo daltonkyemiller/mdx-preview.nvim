@@ -1,7 +1,7 @@
 import { compile } from "@mdx-js/mdx";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-import { createRegistryModule, componentsModule, resolveRuntimeModules } from "./registry.mjs";
+import { createRegistryModule, componentsModule, pluginRoot, resolveRuntimeModules } from "./registry.mjs";
 
 const componentsVirtualModule = "virtual:mdx-preview-components";
 
@@ -36,7 +36,7 @@ const tailwindSourcePlugin = {
       return source;
     }
 
-    return `${source}\n@source "${sourceDirectory}";`;
+    return `${source}\n@source "${pluginRoot}/components";\n@source "${sourceDirectory}";`;
   },
 };
 
@@ -80,6 +80,7 @@ export const createMdxPreviewAliases = () => {
   return [
     { find: "mdx-preview/components", replacement: componentsModule },
     { find: /^react$/, replacement: runtimeModules.react },
+    { find: /^react\/jsx-dev-runtime$/, replacement: runtimeModules.reactJsxDevRuntime },
     { find: /^react\/jsx-runtime$/, replacement: runtimeModules.reactJsxRuntime },
     { find: /^react-dom\/client$/, replacement: runtimeModules.reactDomClient },
     { find: /^@mdx-js\/react$/, replacement: runtimeModules.mdxReact },

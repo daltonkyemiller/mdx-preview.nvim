@@ -1,23 +1,33 @@
-import "./styles.css";
+import { Button } from "./ui/button.jsx";
+
+const panelClassName = "border border-border bg-card p-5 text-card-foreground";
+const kickerClassName = "mb-2 text-xs font-bold tracking-[0.12em] text-primary uppercase";
+const listClassName = "grid list-none border-y border-border p-0";
 
 export function Callout({ children, title = "Note", tone = "info" }) {
+  const toneClassNames = {
+    danger: "border-destructive/45 bg-destructive/10",
+    info: "border-primary/35 bg-primary/[0.07]",
+    warning: "border-warning/45 bg-warning/10",
+  };
+
   return (
-    <aside className={`mdx-callout mdx-callout--${tone}`}>
-      <p className="mdx-callout__title">{title}</p>
-      <div>{children}</div>
+    <aside className={`${panelClassName} ${toneClassNames[tone] ?? toneClassNames.info}`}>
+      <p className={kickerClassName}>{title}</p>
+      <div className="[&>:first-child]:mt-0 [&>:last-child]:mb-0">{children}</div>
     </aside>
   );
 }
 
 export function Flow({ steps }) {
   return (
-    <ol className="mdx-flow">
+    <ol className={listClassName}>
       {steps.map((step, index) => (
-        <li className="mdx-flow__step" key={step.title}>
-          <span className="mdx-flow__number">{String(index + 1).padStart(2, "0")}</span>
+        <li className="grid grid-cols-[3rem_1fr] gap-4 border-b border-border py-4 last:border-b-0" key={step.title}>
+          <span className="font-mono text-sm text-primary">{String(index + 1).padStart(2, "0")}</span>
           <div>
             <strong>{step.title}</strong>
-            {step.detail ? <p>{step.detail}</p> : null}
+            {step.detail ? <p className="mb-0 text-muted-foreground">{step.detail}</p> : null}
           </div>
         </li>
       ))}
@@ -27,14 +37,14 @@ export function Flow({ steps }) {
 
 export function Comparison({ left, right }) {
   return (
-    <div className="mdx-comparison">
-      <section>
-        <p className="mdx-kicker">{left.label}</p>
+    <div className="grid gap-px overflow-hidden border border-border bg-border sm:grid-cols-2">
+      <section className={`${panelClassName} border-0`}>
+        <p className={kickerClassName}>{left.label}</p>
         <h2>{left.title}</h2>
         <p>{left.detail}</p>
       </section>
-      <section>
-        <p className="mdx-kicker">{right.label}</p>
+      <section className={`${panelClassName} border-0`}>
+        <p className={kickerClassName}>{right.label}</p>
         <h2>{right.title}</h2>
         <p>{right.detail}</p>
       </section>
@@ -44,11 +54,14 @@ export function Comparison({ left, right }) {
 
 export function FileMap({ files }) {
   return (
-    <ul className="mdx-file-map">
+    <ul className={listClassName}>
       {files.map((file) => (
-        <li key={file.path}>
-          <code>{file.path}</code>
-          {file.detail ? <span>{file.detail}</span> : null}
+        <li
+          className="grid gap-1 border-b border-border py-4 last:border-b-0 sm:grid-cols-[minmax(10rem,0.7fr)_1fr] sm:gap-4"
+          key={file.path}
+        >
+          <code className="text-sm text-foreground">{file.path}</code>
+          {file.detail ? <span className="text-muted-foreground">{file.detail}</span> : null}
         </li>
       ))}
     </ul>
@@ -57,8 +70,8 @@ export function FileMap({ files }) {
 
 export function Decision({ title, rationale, status = "Recommended" }) {
   return (
-    <section className="mdx-decision">
-      <p className="mdx-kicker">{status}</p>
+    <section className={panelClassName}>
+      <p className={kickerClassName}>{status}</p>
       <h2>{title}</h2>
       <p>{rationale}</p>
     </section>
@@ -67,12 +80,17 @@ export function Decision({ title, rationale, status = "Recommended" }) {
 
 export function Timeline({ events }) {
   return (
-    <ol className="mdx-timeline">
+    <ol className={listClassName}>
       {events.map((event) => (
-        <li key={event.title}>
-          <p className="mdx-kicker">{event.label}</p>
-          <strong>{event.title}</strong>
-          {event.detail ? <p>{event.detail}</p> : null}
+        <li
+          className="grid gap-1 border-b border-border py-4 last:border-b-0 sm:grid-cols-[9rem_1fr] sm:gap-4"
+          key={event.title}
+        >
+          <p className={`${kickerClassName} mb-0`}>{event.label}</p>
+          <div>
+            <strong>{event.title}</strong>
+            {event.detail ? <p className="mb-0 text-muted-foreground">{event.detail}</p> : null}
+          </div>
         </li>
       ))}
     </ol>
@@ -81,22 +99,24 @@ export function Timeline({ events }) {
 
 export function Metric({ label, value, detail }) {
   return (
-    <section className="mdx-metric">
-      <p className="mdx-kicker">{label}</p>
-      <strong>{value}</strong>
-      {detail ? <p>{detail}</p> : null}
+    <section className={panelClassName}>
+      <p className={kickerClassName}>{label}</p>
+      <strong className="block font-serif text-5xl leading-none font-normal tracking-[-0.05em] sm:text-7xl">
+        {value}
+      </strong>
+      {detail ? <p className="mb-0 text-muted-foreground">{detail}</p> : null}
     </section>
   );
 }
 
 export function Architecture({ nodes }) {
   return (
-    <div className="mdx-architecture">
+    <div className="grid gap-px overflow-hidden border border-border bg-border sm:grid-cols-[repeat(auto-fit,minmax(15rem,1fr))]">
       {nodes.map((node) => (
-        <section key={node.title}>
-          <p className="mdx-kicker">{node.label}</p>
+        <section className={`${panelClassName} border-0`} key={node.title}>
+          <p className={kickerClassName}>{node.label}</p>
           <strong>{node.title}</strong>
-          {node.detail ? <p>{node.detail}</p> : null}
+          {node.detail ? <p className="mb-0 text-muted-foreground">{node.detail}</p> : null}
         </section>
       ))}
     </div>
@@ -105,11 +125,11 @@ export function Architecture({ nodes }) {
 
 export function CodeBlock({ children, language = "text", title }) {
   return (
-    <section className="mdx-code-block">
-      <header>
+    <section className="overflow-hidden border border-border bg-card">
+      <header className="border-b border-border px-4 py-2.5 font-mono text-xs font-bold tracking-[0.1em] text-primary uppercase">
         <span>{title ?? language}</span>
       </header>
-      <pre>
+      <pre className="m-0 overflow-auto border-0 bg-transparent p-4">
         <code>{children}</code>
       </pre>
     </section>
@@ -118,6 +138,7 @@ export function CodeBlock({ children, language = "text", title }) {
 
 export const components = {
   Architecture,
+  Button,
   Callout,
   CodeBlock,
   Comparison,

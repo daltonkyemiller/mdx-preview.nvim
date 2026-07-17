@@ -1,8 +1,8 @@
 :root {
-  --page-ink: oklch(0.19 0.01 80);
-  --page-muted: oklch(0.46 0.02 80);
-  --page-paper: oklch(0.97 0.01 100);
-  --page-rule: oklch(0.78 0.01 100);
+  --page-ink: var(--foreground);
+  --page-muted: var(--muted-foreground);
+  --page-paper: var(--background);
+  --page-rule: var(--border);
   color: var(--page-ink);
   background: var(--page-paper);
   font-family: ui-serif, Georgia, Cambria, serif;
@@ -27,6 +27,55 @@ body {
   padding: clamp(3rem, 9vw, 8rem) clamp(1rem, 6vw, 6rem);
   background: color-mix(in oklch, var(--page-paper) 94%, transparent);
   border-inline: 1px solid color-mix(in oklch, var(--page-ink) 7%, transparent);
+}
+
+.preview-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: clamp(2rem, 5vw, 4rem);
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.preview-toolbar__label,
+.preview-toolbar__status {
+  margin: 0;
+  font-family: ui-monospace, monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.preview-toolbar__label {
+  color: var(--primary);
+}
+
+.preview-toolbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.preview-theme-control {
+  display: flex;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.preview-theme-control button {
+  border: 0;
+  border-right: 1px solid var(--border);
+}
+
+.preview-theme-control button:last-child {
+  border-right: 0;
+}
+
+.preview-toolbar__status {
+  color: var(--page-muted);
 }
 
 h1,
@@ -82,5 +131,18 @@ pre {
     width: 100%;
     padding-inline: 1.25rem;
     border: 0;
+  }
+
+  .preview-toolbar__status {
+    display: none;
+  }
+
+  .preview-toolbar {
+    align-items: flex-start;
+  }
+
+  .preview-toolbar__actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
 }

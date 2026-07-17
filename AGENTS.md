@@ -37,7 +37,9 @@ luac -p lua/mdx-preview/init.lua
 - MDX files and custom components can live outside this repository. Do not assume imports resolve from the plugin directory.
 - Built-in components must be registered in `components/index.jsx` and documented in `components/REGISTRY.md`.
 - A custom `mdx-preview.config.mjs` descriptor needs `name`, `module`, `export`, `description`, and `when`. Keep descriptors agent-readable.
-- Tailwind scans the active document directory. Preserve that document-scoped source behavior.
+- Tailwind scans the active document directory and the bundled component kit. Keep the built-ins Tailwind-first and preserve CSS-variable theme tokens as the override contract.
+- Theme overrides need matching `:root`, `:root[data-theme="dark"]`, and `prefers-color-scheme` values so System, Light, and Dark viewer modes all render predictably.
+- Use Base UI only for interactive, accessible primitives. Keep plan and visualization components dependency-light compositions of those primitives and Tailwind utilities.
 - Static directories are the primary export. Single-file output is an optional portability mode.
 - Do not publish material or alter Here Now access settings without explicit user approval.
 

@@ -2,6 +2,20 @@
 
 Use these components from `mdx-preview/components`. They are available without an import through the MDX provider, but importing them makes the document portable and explicit.
 
+The built-ins use Tailwind utilities and shared CSS variable tokens. Override the token values in a site CSS file for `:root`, `:root[data-theme="dark"]`, and the `prefers-color-scheme` system fallback, or replace a component through `mdx-preview.config.mjs`. Interactive primitives use Base UI under the same shadcn-style API.
+
+## `Button`
+
+Use for a real local interaction, such as revealing detail or navigating within a generated MDX app. Do not use a button for a normal external link.
+
+```mdx
+<Button variant="outline" onClick={() => console.log("Saved")}>
+  Save draft
+</Button>
+```
+
+Props: Base UI button props, plus `variant?: "default" | "outline" | "quiet"` and `size?: "default" | "small" | "icon"`.
+
 ## `Callout`
 
 Use for a note, warning, risk, or bounded piece of supporting context.

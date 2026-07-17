@@ -83,5 +83,6 @@ export const resolveRuntimeModules = () => ({
   mdxReact: require.resolve("@mdx-js/react"),
   react: require.resolve("react"),
   reactDomClient: require.resolve("react-dom/client"),
+  reactJsxDevRuntime: require.resolve("react/jsx-dev-runtime"),
   reactJsxRuntime: require.resolve("react/jsx-runtime"),
 });
