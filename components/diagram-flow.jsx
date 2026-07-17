@@ -53,7 +53,7 @@ export function DiagramFlow({ caption, direction = "right", edges = [], nodes = 
 
   return (
     <figure className="my-8 overflow-hidden border border-border bg-muted/35">
-      <div aria-label={title} className="h-[28rem] min-h-[20rem]" role="img">
+      <div aria-label={title} className="diagram-flow h-[28rem] min-h-[20rem] bg-card" role="img">
         <ReactFlow
           edges={flowEdges}
           fitView

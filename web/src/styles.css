@@ -133,6 +133,34 @@ body {
   background: var(--muted);
 }
 
+.diagram-flow .react-flow__controls {
+  border: 1px solid var(--border);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.diagram-flow .react-flow__controls-button {
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  background: var(--card);
+  color: var(--foreground);
+}
+
+.diagram-flow .react-flow__controls-button:last-child {
+  border-bottom: 0;
+}
+
+.diagram-flow .react-flow__controls-button:hover {
+  background: var(--muted);
+}
+
+.diagram-flow .react-flow__controls-button svg {
+  fill: currentColor;
+}
+
 .error {
   margin: 1rem;
   padding: 1rem;
