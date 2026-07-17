@@ -1,0 +1,28 @@
+{
+  "name": "mdx-preview.nvim",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check server/server.mjs",
+    "format": "oxfmt --config oxfmt.json --write .",
+    "format:check": "oxfmt --config oxfmt.json --check .",
+    "lint": "oxlint .",
+    "lint:fix": "oxlint --fix .",
+    "start": "node server/server.mjs"
+  },
+  "dependencies": {
+    "@mdx-js/mdx": "^3.1.1",
+    "@mdx-js/react": "^3.1.1",
+    "@tailwindcss/vite": "^4.1.18",
+    "@vitejs/plugin-react": "^5.0.2",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "tailwindcss": "^4.1.18",
+    "vite": "^7.1.7"
+  },
+  "devDependencies": {
+    "oxfmt": "^0.59.0",
+    "oxlint": "^1.74.0"
+  },
+  "packageManager": "pnpm@11.8.0"
+}

@@ -1,0 +1,27 @@
+:root {
+  color: #24292f;
+  background: #ffffff;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+img {
+  max-width: 100%;
+}
+
+pre {
+  overflow: auto;
+  padding: 16px;
+  border-radius: 8px;
+  background: #f6f8fa;
+}
+
+.error {
+  color: #b42318;
+  white-space: pre-wrap;
+}
