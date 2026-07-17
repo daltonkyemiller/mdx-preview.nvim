@@ -9,6 +9,37 @@ const componentRegistryUrl = (file) => `/@id/virtual:mdx-preview-components?file
 const THEME_STORAGE_KEY = "mdx-preview-theme";
 const initialTheme = () => globalThis.localStorage?.getItem(THEME_STORAGE_KEY) ?? "system";
 
+const loadSiteTheme = ({ theme, themeVersion }) => {
+  const stylesheetId = "mdx-preview-site-theme";
+  const existingStylesheet = globalThis.document.getElementById(stylesheetId);
+
+  if (!theme) {
+    existingStylesheet?.remove();
+    return Promise.resolve();
+  }
+
+  const themeUrl = `/@fs/${theme}?t=${themeVersion}`;
+  if (existingStylesheet?.getAttribute("href") === themeUrl) {
+    return Promise.resolve();
+  }
+
+  const stylesheet = existingStylesheet ?? globalThis.document.createElement("link");
+  stylesheet.id = stylesheetId;
+  stylesheet.rel = "stylesheet";
+  stylesheet.href = themeUrl;
+
+  if (!existingStylesheet) {
+    globalThis.document.head.append(stylesheet);
+  }
+
+  return new Promise((resolve, reject) => {
+    stylesheet.addEventListener("load", resolve, { once: true });
+    stylesheet.addEventListener("error", () => reject(new Error(`Could not load site theme: ${theme}`)), {
+      once: true,
+    });
+  });
+};
+
 function Preview() {
   const [document, setDocument] = useState(null);
   const [documentName, setDocumentName] = useState(null);
@@ -41,7 +72,7 @@ function Preview() {
         if (!response.ok) {
           throw new Error(nextDocument.error);
         }
-        const nextDocumentKey = `${nextDocument.file}:${nextDocument.version}`;
+        const nextDocumentKey = `${nextDocument.file}:${nextDocument.version}:${nextDocument.theme}:${nextDocument.themeVersion}`;
         if (nextDocumentKey === currentDocument) {
           return;
         }
@@ -50,6 +81,7 @@ function Preview() {
         await import(
           /* @vite-ignore */ `/src/tailwind.css?source=${encodeURIComponent(nextDocument.directory)}&t=${nextDocument.version}`
         );
+        await loadSiteTheme(nextDocument);
         const registry = await import(/* @vite-ignore */ componentRegistryUrl(nextDocument.file));
         const module = await import(
           /* @vite-ignore */ `/@fs/${nextDocument.file}?mdx-preview&t=${nextDocument.version}`

@@ -30,27 +30,42 @@ const findConfig = async (documentPath) => {
   return undefined;
 };
 
-export const loadRegistry = async (documentPath) => {
+export const loadSiteConfiguration = async (documentPath) => {
   const configPath = await findConfig(documentPath);
   if (!configPath) {
-    return [];
+    return { components: [], theme: undefined, themeVersion: undefined };
   }
 
   const configUrl = pathToFileURL(configPath);
-  configUrl.searchParams.set("t", String((await stat(configPath)).mtimeMs));
+  const configStats = await stat(configPath);
+  configUrl.searchParams.set("t", String(configStats.mtimeMs));
   const config = (await import(configUrl.href)).default ?? {};
   const components = config.components ?? [];
+  const theme = config.theme;
 
   if (!Array.isArray(components) || !components.every(isComponentDescriptor)) {
     throw new Error(`Invalid component registry in ${configPath}`);
   }
 
-  return components.map((component) => ({
-    ...component,
-    export: component.export ?? "default",
-    module: resolve(dirname(configPath), component.module),
-  }));
+  if (theme !== undefined && typeof theme !== "string") {
+    throw new Error(`Invalid theme path in ${configPath}`);
+  }
+
+  const themePath = theme ? resolve(dirname(configPath), theme) : undefined;
+  const themeVersion = themePath ? (await stat(themePath)).mtimeMs : undefined;
+
+  return {
+    components: components.map((component) => ({
+      ...component,
+      export: component.export ?? "default",
+      module: resolve(dirname(configPath), component.module),
+    })),
+    theme: themePath,
+    themeVersion,
+  };
 };
+
+export const loadRegistry = async (documentPath) => (await loadSiteConfiguration(documentPath)).components;
 
 export const createRegistryModule = async (documentPath) => {
   const registry = await loadRegistry(documentPath);

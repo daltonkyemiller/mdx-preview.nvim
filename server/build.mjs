@@ -4,19 +4,21 @@ import { tmpdir } from "node:os";
 import { dirname, resolve } from "node:path";
 import { viteSingleFile } from "vite-plugin-singlefile";
 import { componentRegistryUrl, createMdxPreviewAliases, createMdxPreviewPlugins } from "./runtime.mjs";
-import { pluginRoot } from "./registry.mjs";
+import { loadSiteConfiguration, pluginRoot } from "./registry.mjs";
 
 const writeBuildEntry = async (directory, documentPath) => {
   const stylesPath = resolve(pluginRoot, "web/src/styles.css");
   const tailwindPath = resolve(pluginRoot, "web/src/tailwind.css");
+  const { theme } = await loadSiteConfiguration(documentPath);
   const entry = `
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { MDXProvider } from "@mdx-js/react";
-import Document from ${JSON.stringify(`${documentPath}?mdx-preview`)};
-import { components } from ${JSON.stringify(componentRegistryUrl(documentPath))};
 import ${JSON.stringify(stylesPath)};
 import ${JSON.stringify(`${tailwindPath}?source=${encodeURIComponent(dirname(documentPath))}`)};
+${theme ? `import ${JSON.stringify(theme)};` : ""}
+import Document from ${JSON.stringify(`${documentPath}?mdx-preview`)};
+import { components } from ${JSON.stringify(componentRegistryUrl(documentPath))};
 
 createRoot(document.getElementById("root")).render(
   <main className="document-frame">

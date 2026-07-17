@@ -47,6 +47,20 @@ pnpm mdx-preview build path/to/site --out dist/site
 pnpm mdx-preview build path/to/site --out dist/site --single-file
 ```
 
+To use it from any directory, register the local binary once:
+
+```sh
+cd ~/dev/mdx-preview.nvim
+pnpm add --global .
+```
+
+After that, no `package.json` is needed next to the MDX file:
+
+```sh
+cd /tmp/plans
+mdx-preview serve ./foo/foo.mdx --open
+```
+
 A site directory needs one of `index.mdx`, `index.md`, `README.mdx`, or `README.md`.
 
 `build` is the canonical shareable export. It produces a static `index.html` and assets that work on any static host. `--single-file` inlines JavaScript and CSS into one HTML file when a recipient explicitly needs a portable file.
@@ -105,7 +119,18 @@ Registered components are available to every MDX file below that config. Keep a 
 
 Tailwind v4 scans the active document directory and the bundled component kit. The built-ins are Tailwind-first and use CSS variables as their theme contract; Base UI powers interactive primitives such as `Button` without imposing an opaque component library.
 
-The viewer defaults to the browser preference. Its **System**, **Light**, and **Dark** controls set a local preference without changing the MDX file. Override both palettes from an imported neighboring CSS file:
+The viewer defaults to the browser preference. Its **System**, **Light**, and **Dark** controls set a local preference without changing the MDX file.
+
+For a site-wide theme, add `theme` to the nearest `mdx-preview.config.mjs`. It applies to every MDX file below that config:
+
+```js
+export default {
+  theme: "./theme.css",
+  components: [],
+};
+```
+
+Use a document-local CSS import when one plan needs an exception; it loads after the site theme and can override its tokens. Define both palettes in either stylesheet:
 
 ```css
 :root {

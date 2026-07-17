@@ -6,6 +6,7 @@ import { resolve } from "node:path";
 import { promisify } from "node:util";
 import test from "node:test";
 import { buildSite } from "../server/build.mjs";
+import { loadSiteConfiguration } from "../server/registry.mjs";
 import { startPreviewServer } from "../server/server.mjs";
 
 const execute = promisify(execFile);
@@ -20,6 +21,14 @@ test("builds a static site with custom registry components", async (context) => 
 
   assert.match(await readFile(resolve(output, "index.html"), "utf8"), /MDX Preview/);
   assert.ok((await readdir(resolve(output, "assets"))).length > 0);
+});
+
+test("loads a configured site theme for every document below its config", async () => {
+  const documentPath = resolve("examples/custom-registry/index.mdx");
+  const site = await loadSiteConfiguration(documentPath);
+
+  assert.equal(site.theme, resolve("examples/custom-registry/theme.css"));
+  assert.equal(typeof site.themeVersion, "number");
 });
 
 test("exports one HTML file when requested", async (context) => {

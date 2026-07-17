@@ -5,7 +5,7 @@ import { basename, dirname, resolve } from "node:path";
 import { createServer } from "vite";
 import { buildSite } from "./build.mjs";
 import { createMdxPreviewAliases, createMdxPreviewPlugins } from "./runtime.mjs";
-import { loadRegistry, pluginRoot } from "./registry.mjs";
+import { loadSiteConfiguration, pluginRoot } from "./registry.mjs";
 
 const argumentValue = (name) => {
   const index = process.argv.indexOf(name);
@@ -47,13 +47,15 @@ export const startPreviewServer = async ({ file, port = 4321, statePath } = {}) 
         try {
           const previewFile = await getPreviewFile();
           const fileStats = await stat(previewFile);
-          await loadRegistry(previewFile);
+          const site = await loadSiteConfiguration(previewFile);
           response.setHeader("Content-Type", "application/json");
           response.end(
             JSON.stringify({
               directory: dirname(previewFile),
               file: previewFile,
               name: basename(previewFile),
+              theme: site.theme,
+              themeVersion: site.themeVersion,
               version: fileStats.mtimeMs,
             })
           );

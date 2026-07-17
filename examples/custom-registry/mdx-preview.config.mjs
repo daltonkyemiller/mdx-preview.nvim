@@ -1,4 +1,5 @@
 export default {
+  theme: "./theme.css",
   components: [
     {
       name: "StatusBadge",
