@@ -42,6 +42,21 @@ test("builds a static site with custom registry components", async (context) => 
   assert.ok((await readdir(resolve(output, "assets"))).length > 0);
 });
 
+test("builds documents that use the built-in review components", async (context) => {
+  const output = await temporaryDirectory("mdx-preview-built-ins-");
+  context.after(() => rm(output, { force: true, recursive: true }));
+
+  await buildSite({ documentPath: resolve("test/fixtures/built-in-review-components/index.mdx"), outDir: output });
+
+  const assets = await Promise.all(
+    (await readdir(resolve(output, "assets"))).map((asset) => readFile(resolve(output, "assets", asset), "utf8")),
+  );
+  const bundle = assets.join("\n");
+  assert.match(bundle, /Release readiness/);
+  assert.match(bundle, /components\/index\.jsx/);
+  assert.match(bundle, /answer = 42/);
+});
+
 test("loads a configured site theme for every document below its config", async () => {
   const documentPath = resolve("examples/custom-registry/index.mdx");
   const site = await loadSiteConfiguration(documentPath);

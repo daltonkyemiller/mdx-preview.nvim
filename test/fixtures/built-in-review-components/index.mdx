@@ -1,0 +1,15 @@
+# Built-in review components
+
+<Checklist
+  title="Release readiness"
+  items={[{ id: "tests", label: "Tests pass", checked: true }]}
+/>
+
+<FileTree files={[{ path: "components/index.jsx", change: "modified" }]} />
+
+<Diff
+  filename="example.js"
+  language="javascript"
+  before={`const answer = 41;`}
+  after={`const answer = 42;`}
+/>
