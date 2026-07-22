@@ -23,6 +23,8 @@
     "@dagrejs/dagre": "^3.0.0",
     "@mdx-js/mdx": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
+    "@pierre/diffs": "^1.2.12",
+    "@pierre/trees": "1.0.0-beta.5",
     "@tailwindcss/vite": "^4.1.18",
     "@vitejs/plugin-react": "^5.0.2",
     "@xyflow/react": "^12.11.2",

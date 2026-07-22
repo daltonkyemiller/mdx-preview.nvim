@@ -62,7 +62,10 @@ test("resolves a site directory and describes the document used by every rendere
 test("lists built-in and project-specific component context", async () => {
   const context = await getComponentContext("examples/custom-registry");
 
+  assert.match(context, /## `Checklist`/);
   assert.match(context, /## `Diagram`/);
+  assert.match(context, /## `Diff`/);
+  assert.match(context, /## `FileTree`/);
   assert.match(context, /## Project-specific components/);
   assert.match(context, /### `StatusBadge`/);
   assert.match(context, /Use when: Use for a compact status label near a plan title\./);

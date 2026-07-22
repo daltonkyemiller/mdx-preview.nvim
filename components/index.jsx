@@ -1,5 +1,7 @@
 import { Button } from "./ui/button.jsx";
 import { Diagram } from "./diagram.jsx";
+import { Diff } from "./diff.jsx";
+import { FileTree } from "./file-tree.jsx";
 
 const panelClassName = "rounded-[var(--radius)] border border-border bg-card p-5 text-card-foreground sm:p-6";
 const kickerClassName = "mb-3 font-geist-pixel text-[10px] tracking-[0.2em] text-muted-foreground uppercase";
@@ -35,6 +37,31 @@ export function Flow({ steps }) {
         </li>
       ))}
     </ol>
+  );
+}
+
+export function Checklist({ id, items, title }) {
+  return (
+    <section className="overflow-hidden rounded-[var(--radius)] border border-border bg-card" id={id}>
+      {title ? (
+        <header className="border-b border-border px-5 py-4 sm:px-6">
+          <p className={`${kickerClassName} mb-0`}>{title}</p>
+        </header>
+      ) : null}
+      <ul className="m-0 grid list-none p-0">
+        {items.map((item) => (
+          <li className="border-b border-border last:border-b-0" key={item.id}>
+            <label className="grid cursor-pointer grid-cols-[1.25rem_minmax(0,1fr)] gap-3 px-5 py-4 sm:px-6">
+              <input className="mt-1 size-4 accent-primary" defaultChecked={item.checked ?? false} type="checkbox" />
+              <span className="grid gap-1">
+                <span className="font-medium text-foreground">{item.label}</span>
+                {item.note ? <span className="text-sm leading-6 text-muted-foreground">{item.note}</span> : null}
+              </span>
+            </label>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 
@@ -162,17 +189,20 @@ export function CodeBlock({ children, language = "text", title }) {
   );
 }
 
-export { Button, Diagram };
+export { Button, Diagram, Diff, FileTree };
 
 export const components = {
   Architecture,
   Button,
   Callout,
+  Checklist,
   CodeBlock,
   Comparison,
   Decision,
   Diagram,
+  Diff,
   FileMap,
+  FileTree,
   Flow,
   Metric,
   TableOfContents,

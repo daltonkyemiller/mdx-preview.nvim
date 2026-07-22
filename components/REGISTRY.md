@@ -30,6 +30,23 @@ Use for a note, warning, risk, or bounded piece of supporting context.
 
 Props: `title?: string`, `tone?: "info" | "warning" | "danger"`.
 
+## `Checklist`
+
+Use for implementation steps, acceptance criteria, or review items that readers may toggle as they work.
+
+```mdx
+<Checklist
+  id="release-checklist"
+  title="Release readiness"
+  items={[
+    { id: "tests", label: "Run the test suite", checked: true },
+    { id: "smoke-test", label: "Verify production", note: "Check the primary user flow after deployment." },
+  ]}
+/>
+```
+
+Props: `id?: string`, `title?: string`, `items: Array<{ id: string, label: string, note?: string, checked?: boolean }>`.
+
 ## `Flow`
 
 Use for three or more ordered steps, handoffs, or dependent events.
@@ -62,6 +79,22 @@ Use when a plan changes three or more files or folders.
 ```
 
 Props: `files: Array<{ path: string, detail?: string }>`.
+
+## `FileTree`
+
+Use for a compact, navigable project tree. Paths are expanded by default, and optional Git-style change states are rendered by `@pierre/trees`.
+
+```mdx
+<FileTree
+  title="Changed files"
+  files={[
+    { path: "components/index.jsx", change: "modified" },
+    { path: "components/file-tree.jsx", change: "added" },
+  ]}
+/>
+```
+
+Props: `title?: string`, `height?: string`, `files: Array<{ path: string, change?: "added" | "deleted" | "modified" | "removed" | "renamed" }>`.
 
 ## `Decision`
 
@@ -166,3 +199,20 @@ Use for a short, focused code or configuration excerpt.
 ```
 
 Props: `language?: string`, `title?: string`, `children: string`.
+
+## `Diff`
+
+Use to compare two versions of one file. Rendering, syntax highlighting, line wrapping, and virtualization are provided by `@pierre/diffs`.
+
+```mdx
+<Diff
+  filename="components/index.jsx"
+  language="jsx"
+  mode="unified"
+  before={`export const components = { Callout };`}
+  after={`export const components = { Callout, Checklist };`}
+  caption="Register the new built-in component."
+/>
+```
+
+Props: `before: string`, `after: string`, `filename?: string`, `language?: string`, `mode?: "unified" | "split"`, `caption?: string`.
